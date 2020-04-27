@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css?family=Manrope&display=swap');
+
+.PanelPos
+{
+display: flex;
+}
+.Panel
+{
+    height: 100%;
+    width: 160px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #23c7ac;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+li a
+{
+color: white;
+    text-decoration: none;
+    font-family: 'Manrope', sans-serif;
+    font-size: 20px;
+}
+.b
+{
+    background-color: #23c7ac;
+    width: 100%;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    transition: all 0.3s ease 0s;
+}
+
+
+.b:hover
+{
+    background-color: #1fb299 ;
+
+}
+
