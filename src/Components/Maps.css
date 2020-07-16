@@ -2,7 +2,7 @@
 
 .leaflet-container
 {
-    width:88.6%;
+    width:89.6%;
     height: 100vh;
     position: fixed;
     right: 0;
@@ -29,7 +29,7 @@
     outline: none;
 }
 .remove-marker:hover{
-background-color: #ed2939 ;
+background-color:#cb2d40 ;
 
 }
 

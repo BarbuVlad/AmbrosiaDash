@@ -13,8 +13,8 @@ import NavBar from "./Components/NavBar";
 
   let App = () => {
   return (
-
-      <NavBar/>
+      <Login/>
+     // <NavBar/>
   );
 };
 

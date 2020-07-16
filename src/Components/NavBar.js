@@ -6,8 +6,8 @@ import {
     Link
 } from "react-router-dom";
 import "./NavBar.css"
-import Login from "./Login";
 import Maps from "./Maps";
+import Volunteers from "./Volunteers";
 // Each logical "route" has two components, one for
 // the sidebar and one for the main area. We want to
 // render both of them in different places when the
@@ -18,21 +18,17 @@ import Maps from "./Maps";
 // content section. All routes are in the same
 // order they would appear in a <Switch>.
 const routes = [
-    {
-        path: "/",
-        exact: true,
-        sidebar: () => <div> </div>,
-        main: () => <Login/>
-    },
+
     {
         path: "/Components/Maps",
         sidebar: () => <div> </div>,
-        main: () => <Maps/>
+        main: () => <Maps/>,
+        exact:true
     },
     {
-        path: "/shoelaces",
+        path: "/Components/Volunteers",
         sidebar: () => <div> </div>,
-        main: () => <h2>Volunteers</h2>
+        main: () => <Volunteers/>
     }
 ];
 
@@ -43,12 +39,7 @@ let NavBar =()=> {
             <div className={"PanelPos"}>
                 <div className={"Panel"} >
                     <ul style={{ listStyleType: "none", padding: 0 }}>
-                        <li>
-                            <div className={'b'}>
-                                <Link to="/" >Login</Link>
-                            </div>
 
-                        </li>
                         <li>
                             <div className={'b'}>
                                 <Link to="/Components/Maps">Maps</Link>
@@ -57,7 +48,7 @@ let NavBar =()=> {
                         </li>
                         <li>
                             <div className={'b'}>
-                                <Link to="/shoelaces">Volunteers</Link>
+                                <Link to="/Components/Volunteers">Volunteers</Link>
                             </div>
 
                         </li>
