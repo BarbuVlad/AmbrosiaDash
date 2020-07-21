@@ -21,7 +21,7 @@ export default function Login() {
         event.preventDefault();
     }
 
-   let checkAcc= ()=>
+   let checkAcc = () =>
     {
         let lnk = 'http://92.87.91.16/backend_code/api/admins/login.php?name='+email+'&password='+password
         axios.get(lnk, {
@@ -41,7 +41,7 @@ export default function Login() {
 
         // daca are al doilea argument,atunci se comporta exact ca si componentDidMount
 
-    if(serverAnswer==='yes')
+    if(serverAnswer === 'yes')
     {
         return(
             <NavBar/>
