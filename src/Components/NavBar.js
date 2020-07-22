@@ -9,6 +9,7 @@ import "./NavBar.css"
 import Maps from "./Maps";
 import GMaps from "./GMaps";
 import Volunteers from "./Volunteers";
+import GMaps from "./GMaps"
 // Each logical "route" has two components, one for
 // the sidebar and one for the main area. We want to
 // render both of them in different places when the
