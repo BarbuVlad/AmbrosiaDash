@@ -1,7 +1,9 @@
 import React from 'react'
-import { GoogleMap, LoadScript ,Marker,InfoWindow} from '@react-google-maps/api';
-import {Popup} from "react-leaflet";
-import axios from "axios";
+import { GoogleMap,Marker,InfoWindow} from '@react-google-maps/api';
+import Search from './Search'
+import Locate from "./Locate"
+import "@reach/combobox/styles.css";
+import "./GMaps.css"
 
 
 
@@ -41,10 +43,14 @@ function MyComponent() {
     const onMapLoad = React.useCallback((map) => {
         mapRef.current = map;
     }, []);
+    const panTo = React.useCallback(({lat, lng}) => {
+      mapRef.current.panTo({lat, lng});
+      mapRef.current.setZoom(14);
+
+  }, []);
     return (
-        <LoadScript
-            googleMapsApiKey="AIzaSyCiqc443J4Axm0tZ_ECjOMOgRrwu56zTVA"
-        >
+
+
     <div>
         <h1>
             Ambrosia{" "}
@@ -64,6 +70,8 @@ function MyComponent() {
 
 
             >
+            <Locate panTo={panTo}/>
+            <Search panTo={panTo}/>
                 { markers.map((marker)=>(
 
 
@@ -105,7 +113,6 @@ function MyComponent() {
             </GoogleMap>
     </div>
 
-        </LoadScript>
     )
 }
 
