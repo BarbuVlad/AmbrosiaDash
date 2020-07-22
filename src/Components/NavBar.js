@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import "./NavBar.css"
 import Maps from "./Maps";
+import GMaps from "./GMaps";
 import Volunteers from "./Volunteers";
 // Each logical "route" has two components, one for
 // the sidebar and one for the main area. We want to
@@ -22,7 +23,7 @@ const routes = [
     {
         path: "/Components/Maps",
         sidebar: () => <div> </div>,
-        main: () => <Maps/>,
+        main: () => <GMaps/>,
         exact:true
     },
     {
