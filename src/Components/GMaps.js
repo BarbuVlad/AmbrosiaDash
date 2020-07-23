@@ -5,6 +5,7 @@ import Locate from "./Locate"
 import "@reach/combobox/styles.css";
 import "./GMaps.css"
 import axios from 'axios'
+import {marker} from "leaflet/dist/leaflet-src.esm";
 
 
 const containerStyle = {
@@ -21,11 +22,29 @@ const center = {
     lat: 45.760696,
     lng: 21.226788
 };
+function PushToServer(e)
+{
+    const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
+
+    axios.post('http://92.87.91.16/backend_code/api/red_marker/create.php',
+        {
+            "longitude":e.latLng.lng(),
+            "latitude": e.latLng.lat()
+
+
+
+        }
+    ).then(console.log("LATLONG"+e.latLng)
+    )
+}
 
 function MyComponent() {
     const [markers, setMarkers] = React.useState([]);
     const [selected, setSelected] = React.useState(null);
-
+   const  convToTen =(num)=>  //conversie la 10 zecimale
+    {
+        return num.toFixed(10)
+    }
     let markerID=0;
     useEffect(() => {
     axios.get("http://92.87.91.16/backend_code/api/red_marker/read.php")
@@ -49,10 +68,29 @@ function MyComponent() {
         );
 
     },[]);
+    //-------------------posibil upload
 
 
+
+//--------------------------------------------------------
+   /* const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
+    useEffect(() =>  {
+    axios.post(proxyurl+'http://92.87.91.16/backend_code/api/red_marker/create.php',
+        {
+            latitude:  marker.lng,
+            longitude: marker.lat,
+            uid_volunteer:null,
+            time:null,
+            mac_user: "00-00-00-00-00-00"
+
+        }
+    ).then(function (response) {
+            console.log(response);
+        }
+    ) },[]);*/
 
 const onMapClick = React.useCallback((e)=>{
+    markerID++;
         setMarkers((current)=> [
             ... current,
             {
@@ -61,9 +99,11 @@ const onMapClick = React.useCallback((e)=>{
                 lng : e.latLng.lng(),
                // time: new Date(),
                 id : markerID,
+
             },
         ]);
-    markerID++;
+//apelare addserver
+    PushToServer(e)
     },[]);
 
     const mapRef = React.useRef();
@@ -109,7 +149,7 @@ const onMapClick = React.useCallback((e)=>{
                         onClick={() => {
                             setSelected(marker);
                             console.log(markerID)
-                            console.log(markers);
+                            console.log(marker.lat);
                         }}
 
 
