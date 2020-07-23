@@ -37,7 +37,17 @@ function PushToServer(e)
     ).then(console.log("LATLONG"+e.latLng)
     )
 }
+/*function DeleteRedMarkers(e) {
+    axios.delete('http://92.87.91.16/backend_code/api/red_marker/delete.php',
+        {
+            "latitude":  e.latLng.lng().toString(),
+            "longitude": e.latLng.lat().toString()
+        }
 
+    ).then(
+        data => console.log(data, " a fost sters")
+    )
+}*/
 
 function MyComponent() {
     const [markers, setMarkers] = React.useState([]);
@@ -150,7 +160,7 @@ const onMapClick = React.useCallback((e)=>{
                             <button className={"remove-marker"}
                                     onClick={()=>{
                                     console.log("deleted");
-
+                                 //   DeleteRedMarkers();
 
                                     }}
                             >
