@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { GoogleMap,Marker,InfoWindow} from '@react-google-maps/api';
 import Search from './Search'
 import Locate from "./Locate"
 import "@reach/combobox/styles.css";
 import "./GMaps.css"
-
+import axios from 'axios'
+import {marker} from "leaflet/dist/leaflet-src.esm";
 
 
 const containerStyle = {
@@ -21,22 +22,77 @@ const center = {
     lat: 45.760696,
     lng: 21.226788
 };
+function PushToServer(e)
+{
+    const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
+
+    axios.post(proxyurl+'http://92.87.91.16/backend_code/api/red_marker/create.php',
+        {
+            "latitude":e.latLng.lng(),
+            "longitude": e.latLng.lat()
+
+
+
+        }
+    ).then(console.log("LATLONG"+e.latLng)
+    )
+}
+/*function DeleteRedMarkers(e) {
+    axios.delete('http://92.87.91.16/backend_code/api/red_marker/delete.php',
+        {
+            "latitude":  e.latLng.lng().toString(),
+            "longitude": e.latLng.lat().toString()
+        }
+
+    ).then(
+        data => console.log(data, " a fost sters")
+    )
+}*/
 
 function MyComponent() {
     const [markers, setMarkers] = React.useState([]);
     const [selected, setSelected] = React.useState(null);
-    const onMapClick = React.useCallback((e)=>{
+
+    let markerID=0;
+    useEffect(() => {
+    axios.get("http://92.87.91.16/backend_code/api/red_marker/read.php")
+        .then(
+            res => {
+                console.log(res.data.data);
+                for (let i = 0; i < res.data.data.length; i++) {
+                    markerID=i;
+                    setMarkers((current)=> [
+                        ... current,
+                        {
+                            lng: parseFloat( res.data.data[i].latitude),
+                            lat :  parseFloat(res.data.data[i].longitude),
+                            id: i,
+
+                        },
+                    ]);
+                }
+
+            }
+        );
+
+    },[]);
+
+
+
+const onMapClick = React.useCallback((e)=>{
+    markerID++;
         setMarkers((current)=> [
             ... current,
             {
 
                 lat : e.latLng.lat(),
                 lng : e.latLng.lng(),
-                time: new Date(),
+                            id : markerID,
 
             },
         ]);
-
+//apelare addserver
+    PushToServer(e)
     },[]);
 
     const mapRef = React.useRef();
@@ -48,15 +104,16 @@ function MyComponent() {
       mapRef.current.setZoom(14);
 
   }, []);
+
     return (
 
 
     <div>
         <h1>
             Ambrosia{" "}
-            <span role = "img" aria-label="redmarker" >
 
-            </span>
+
+
         </h1>
 
 
@@ -67,25 +124,27 @@ function MyComponent() {
                 zoom={10}
                 onClick={onMapClick}
                 onLoad={onMapLoad}
-
-
             >
+
             <Locate panTo={panTo}/>
             <Search panTo={panTo}/>
-                { markers.map((marker)=>(
+                {  markers.map((marker)=>(
+                    markerID++,
 
 
                     <Marker
-                        key={`${marker.lat}-${marker.lng}-${marker.Date}`}
-                        position={{ lat: marker.lat, lng: marker.lng }}
+                        key={markerID}
+                        position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
                         onClick={() => {
                             setSelected(marker);
-
+                            console.log(markerID)
+                            console.log(marker.lat);
                         }}
 
 
                     />
-                )) }
+
+                ))}
 
                 {selected ? (
 
@@ -100,6 +159,8 @@ function MyComponent() {
                             <h2> Ambrozie!</h2>
                             <button className={"remove-marker"}
                                     onClick={()=>{
+                                    console.log("deleted");
+                                 //   DeleteRedMarkers();
 
                                     }}
                             >

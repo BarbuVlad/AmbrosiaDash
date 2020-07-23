@@ -118,7 +118,7 @@ class Maps extends React.Component{
                 this.convToTen(e.latlng.lat),"||| " ,typeof this.convToTen(e.latlng.lng))
 
             const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
-            axios.post(proxyurl+'http://92.87.91.16/backend_code/api/red_marker/create.php',
+            axios.post('http://92.87.91.16/backend_code/api/red_marker/create.php',
                 {
                     latitude: this.convToTen(e.latlng.lng),
                     longitude: this.convToTen(e.latlng.lat),
@@ -172,7 +172,8 @@ console.log("IN REMOVE LAT: ",this.state.selectedMarkerLat.toString(),"LNG: ",th
 
             axios.delete('http://92.87.91.16/backend_code/api/red_marker/delete.php',
                 {
-data
+                    "latitude":  this.state.selectedMarkerLng.toString(),
+                    "longitude": this.state.selectedMarkerLat.toString()
 
 
 
