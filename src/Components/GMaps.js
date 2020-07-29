@@ -53,7 +53,7 @@ function postToServer(lat,lng,url)
         }
     ).then(console.log("LATLONG")
     )
-}
+}/*
 function deleteMarkers(lat,lng,url) {
 
     //stergere din markers
@@ -75,7 +75,7 @@ function deleteMarkers(lat,lng,url) {
     console.log(lat,lng)
 
 
-}
+}*/
 function getMarkersFromServer(url,markerID,setMarkers)
 {
     axios.get(url)
@@ -105,7 +105,141 @@ function getMarkersFromServer(url,markerID,setMarkers)
 }
 
 
+
+
 function MyComponent() {
+
+        function countDecimals(number)
+        {
+            var char_array = number.toString().split(""); // split every single char
+            var not_decimal = char_array.lastIndexOf(".");
+            return (not_decimal<0)?0:char_array.length - not_decimal;
+        }
+    let convToTen =(num)=>  //conversie la 10 zecimale
+    {
+        return num.toFixed(10)
+    }
+
+    //---------------------delte
+    function deleteMarkers(lat,lng,url,color) {
+
+        //remove locally from markers
+/*
+        lat = convToTen(lat)
+        lng = convToTen(lng)*/
+        let j;
+        let tempMarkers=[]
+        //------------------------------------------------red
+        if(color=="red")
+        for(let i = 0; i < redMarkers.length;i++)
+        {
+
+            /*     console.log("lat: "+redMarkers[i].lat + "  "+ lat)
+                 console.log("lng: "+ redMarkers[i].lng + "   "+lng)*/
+            if(convToTen(parseFloat(redMarkers[i].lat)) === lat && convToTen(parseFloat(redMarkers[i].lng))=== lng)
+            {
+                j=i;
+                for(let i=0;i<j;i++)
+                    tempMarkers.push(redMarkers[i]);
+                for(let i=j+1;i< redMarkers.length;i++)
+                    tempMarkers.push(redMarkers[i]);
+
+                setRedMarkers(tempMarkers)
+                console.log(" red ma"+ redMarkers)
+
+
+            }
+        }
+        tempMarkers=[];
+        //------------------------------------------blue
+        if(color=="blue")
+        for(let i = 0; i < blueMarkers.length;i++)
+        {
+
+            /*     console.log("lat: "+blueMarkers[i].lat + "  "+ lat)
+                 console.log("lng: "+ blueMarkers[i].lng + "   "+lng)*/
+            if(convToTen(parseFloat(blueMarkers[i].lat)) === lat && convToTen(parseFloat(blueMarkers[i].lng)) === lng)
+            {
+                j=i;
+                for(let i=0;i<j;i++)
+                    tempMarkers.push(blueMarkers[i]);
+                for(let i=j+1;i< blueMarkers.length;i++)
+                    tempMarkers.push(blueMarkers[i]);
+
+                setBlueMarkers(tempMarkers)
+                console.log(" blue ma"+ blueMarkers)
+
+
+            }
+        }
+        tempMarkers=[];
+        //------------------------------------------grey
+        if(color=="grey")
+        for(let i = 0; i < greyMarkers.length;i++)
+        {
+
+            /*     console.log("lat: "+greyMarkers[i].lat + "  "+ lat)
+                 console.log("lng: "+ greyMarkers[i].lng + "   "+lng)*/
+            if(convToTen(parseFloat(greyMarkers[i].lat)) === lat && convToTen(parseFloat(greyMarkers[i].lng)) === lng)
+            {
+                j=i;
+                for(let i=0;i<j;i++)
+                    tempMarkers.push(greyMarkers[i]);
+                for(let i=j+1;i< greyMarkers.length;i++)
+                    tempMarkers.push(greyMarkers[i]);
+
+                setGreyMarkers(tempMarkers)
+                console.log(" grey ma"+ greyMarkers)
+
+
+            }
+        }
+        tempMarkers=[];
+        //------------------------------------------yellow
+        if(color=="yellow")
+        for(let i = 0; i < yellowMarkers.length;i++)
+        {
+
+            /*     console.log("lat: "+yellowMarkers[i].lat + "  "+ lat)
+                 console.log("lng: "+ yellowMarkers[i].lng + "   "+lng)*/
+            if(convToTen(parseFloat(yellowMarkers[i].lat)) === lat && convToTen(parseFloat(yellowMarkers[i].lng)) === lng)
+            {
+                j=i;
+                for(let i=0;i<j;i++)
+                    tempMarkers.push(yellowMarkers[i]);
+                for(let i=j+1;i< yellowMarkers.length;i++)
+                    tempMarkers.push(yellowMarkers[i]);
+
+                setYellowMarkers(tempMarkers)
+                console.log(" yellow ma"+ yellowMarkers)
+
+
+            }
+        }
+
+
+        //stergere din markers(DB)
+
+        let data ={
+            "latitude": lat.toString(),
+            "longitude": lng.toString()
+
+        }
+        axios.delete(url,
+            {
+                data
+            }
+
+        ).then(
+            data => console.log(data, " a fost sters")
+
+        )
+        console.log(lat,lng)
+
+
+    }
+
+
     const [redMarkers, setRedMarkers] = useState([]);
     const [blueMarkers,setBlueMarkers] = useState([]);
     const [greyMarkers,setGreyMarkers] = useState([]);
@@ -123,7 +257,13 @@ function MyComponent() {
 
     let alwaysGetMarkers =()=>{
         setRedMarkers([])
-
+        setBlueMarkers([])
+        setGreyMarkers([])
+        setYellowMarkers([])
+        getMarkersFromServer(redGetUrl,markerRedID,setRedMarkers);
+        getMarkersFromServer(blueGetUrl,markerBlueID,setBlueMarkers);
+        getMarkersFromServer(greyGetUrl,markerGreyID,setGreyMarkers);
+        getMarkersFromServer(yellowGetUrl,markerYellowID,setYellowMarkers);
         setTimeout(alwaysGetMarkers, 60 * 1000)
     }
 
@@ -222,10 +362,14 @@ function MyComponent() {
                             <button className={"remove-marker"}
                                     onClick={()=>{
                                         console.log("deleted");
-                                        deleteMarkers(redSelected.lat,redSelected.lng,redDeleteUrl);
 
-                                        setRedMarkers([])
-                                        getMarkersFromServer(redGetUrl,markerRedID,setRedMarkers);
+                                            deleteMarkers(convToTen(parseFloat(redSelected.lat)), convToTen(parseFloat(redSelected.lng)), redDeleteUrl, "red");
+
+
+
+                                        /*setRedMarkers([])
+                                        setTimeout(200)
+                                        getMarkersFromServer(redGetUrl,markerRedID,setRedMarkers);*/
                                         setRedSelected(null);
 
                                     }}
@@ -248,9 +392,11 @@ function MyComponent() {
 
                                         postToServer(redSelected.lat,redSelected.lng,greyPostUrl);
 
-                                        deleteMarkers(redSelected.lat,redSelected.lng,redDeleteUrl);
-                                        setRedMarkers([])
-                                        getMarkersFromServer(redGetUrl,markerRedID,setRedMarkers);
+                                        deleteMarkers(convToTen(parseFloat(redSelected.lat)),convToTen(parseFloat(redSelected.lng)),redDeleteUrl,"red");
+
+                                       /* setRedMarkers([])
+                                        setTimeout(200)
+                                        getMarkersFromServer(redGetUrl,markerRedID,setRedMarkers);*/
                                         setRedSelected(null);
 
 
@@ -303,10 +449,11 @@ function MyComponent() {
                             <button className={"removeBlue-marker"}
                                     onClick={()=>{
                                         console.log("deleted");
-                                        deleteMarkers(blueSelected.lat,blueSelected.lng,blueDeleteUrl);
+                                        deleteMarkers(convToTen(parseFloat(blueSelected.lat)),convToTen(parseFloat(blueSelected.lng)),blueDeleteUrl,"blue");
 
-                                        setBlueMarkers([])
-                                        getMarkersFromServer(blueGetUrl,markerBlueID,setBlueMarkers);
+                                        /*setBlueMarkers([])
+                                        setTimeout(200)
+                                        getMarkersFromServer(blueGetUrl,markerBlueID,setBlueMarkers);*/
                                         setBlueSelected(null);
 
                                     }}
@@ -358,10 +505,11 @@ function MyComponent() {
                             <button className={"removeGrey-marker"}
                                     onClick={()=>{
                                         console.log("deleted");
-                                        deleteMarkers(greySelected.lat,greySelected.lng,greyDeleteUrl);
+                                        deleteMarkers(convToTen(parseFloat(greySelected.lat)),convToTen(parseFloat(greySelected.lng)),greyDeleteUrl,"grey");
 
-                                        setGreyMarkers([])
-                                        getMarkersFromServer(greyGetUrl,markerGreyID,setGreyMarkers);
+                                        /*setGreyMarkers([])
+                                        setTimeout(200)
+                                        getMarkersFromServer(greyGetUrl,markerGreyID,setGreyMarkers);*/
                                         setGreySelected(null);
 
                                     }}
@@ -414,10 +562,11 @@ function MyComponent() {
                             <button className={"removeYellow-marker"}
                                     onClick={()=>{
                                         console.log("deleted");
-                                        deleteMarkers(yellowSelected.lat,yellowSelected.lng,yellowDeleteUrl);
+                                        deleteMarkers(convToTen(parseFloat(yellowSelected.lat)),convToTen(parseFloat(yellowSelected.lng)),yellowDeleteUrl,"yellow");
 
-                                        setYellowMarkers([])
-                                        getMarkersFromServer(yellowGetUrl,markerYellowID,setYellowMarkers);
+                                        /*setYellowMarkers([])
+                                        setTimeout(200)
+                                        getMarkersFromServer(yellowGetUrl,markerYellowID,setYellowMarkers);*/
                                         setYellowSelected(null);
 
                                     }}
@@ -440,9 +589,11 @@ function MyComponent() {
 
                                         postToServer(yellowSelected.lat,yellowSelected.lng,redPostUrl);
 
-                                        deleteMarkers(yellowSelected.lat,yellowSelected.lng,yellowDeleteUrl);
-                                        setYellowMarkers([])
-                                        getMarkersFromServer(yellowGetUrl,markerYellowID,setYellowMarkers);
+                                            deleteMarkers(convToTen(parseFloat(yellowSelected.lat)), convToTen(parseFloat(yellowSelected.lng)), yellowDeleteUrl, "yellow");
+
+                                       /* setYellowMarkers([])
+                                        setTimeout(200)
+                                        getMarkersFromServer(yellowGetUrl,markerYellowID,setYellowMarkers);*/
                                         setYellowSelected(null);
 
 
