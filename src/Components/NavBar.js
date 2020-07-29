@@ -8,6 +8,10 @@ import {
 import "./NavBar.css"
 import Volunteers from "./Volunteers";
 import GMaps from "./GMaps"
+import mapsIcon from "../Icons/maps-icon.png"
+import volIcon from "../Icons/vol-icon.png"
+import logoAmb from "../Logo/AmbrosiaLogo.png"
+import logoAmb1 from "../Logo/logo.png"
 // Each logical "route" has two components, one for
 // the sidebar and one for the main area. We want to
 // render both of them in different places when the
@@ -38,17 +42,23 @@ let NavBar =()=> {
         <Router>
             <div className={"PanelPos"}>
                 <div className={"Panel"} >
+                    <div className={"ambrosia-title"}>
+                        <img className={"logo"} src={logoAmb} alt ={"logoAmb"}/>
+                        Ambrosia Alert
+                    </div>
                     <ul style={{ listStyleType: "none", padding: 0 }}>
 
                         <li>
                             <div className={'b'}>
-                                <Link to="/Components/Maps">Maps</Link>
+                                <img className={"maps-icon"} src={mapsIcon} alt ={"mapsIcon"}/>
+                                <Link to="/Components/Maps"> Maps</Link>
                             </div>
 
                         </li>
                         <li>
                             <div className={'b'}>
-                                <Link to="/Components/Volunteers">Volunteers</Link>
+                                <img className={"vol-icon"} src={volIcon} alt ={"volIcon"}/>
+                                <Link to="/Components/Volunteers"> Volunteers</Link>
                             </div>
 
                         </li>

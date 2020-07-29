@@ -12,7 +12,7 @@ display: flex;
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #23c7ac;
+    background-color: #2b313d;
     overflow-x: hidden;
     padding-top: 20px;
 }
@@ -22,11 +22,11 @@ li a
 color: white;
     text-decoration: none;
     font-family: 'Manrope', sans-serif;
-    font-size: 20px;
+    font-size: 22px;
 }
 .b
 {
-    background-color: #23c7ac;
+    background-color: #2b313d;
     width: 100%;
     padding-bottom: 7px;
     padding-top: 7px;
@@ -40,3 +40,23 @@ color: white;
 
 }
 
+.maps-icon{
+    height: 25px;
+    width: 25px;
+    top: 10px;
+}
+
+.vol-icon{
+    height: 25px;
+    width: 20px;
+}
+
+.logo{
+    height: 110px;
+    width: 110px;
+}
+
+.ambrosia-title{
+    color:white;
+    font-size: 25px;
+}
