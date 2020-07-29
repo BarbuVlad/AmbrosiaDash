@@ -20,6 +20,9 @@ let greyPostUrl='http://92.87.91.16/backend_code/api/grey_marker/create.php';
 let greyGetUrl = 'http://92.87.91.16/backend_code/api/grey_marker/read.php';
 let greyDeleteUrl = 'http://92.87.91.16/backend_code/api/grey_marker/delete.php';
 
+let yellowPostUrl='http://92.87.91.16/backend_code/api/yellow_marker/create.php';
+let yellowGetUrl='http://92.87.91.16/backend_code/api/yellow_marker/read.php';
+let yellowDeleteUrl='http://92.87.91.16/backend_code/api/yellow_marker/delete.php';
 
 const containerStyle = {
     width: 'relative',
@@ -106,15 +109,15 @@ function MyComponent() {
     const [redMarkers, setRedMarkers] = useState([]);
     const [blueMarkers,setBlueMarkers] = useState([]);
     const [greyMarkers,setGreyMarkers] = useState([]);
-
+    const [yellowMarkers,setYellowMarkers] = useState([]);
     const [redSelected, setRedSelected] = useState(null);
     const [blueSelected, setBlueSelected] = useState(null);
     const [greySelected, setGreySelected] = useState(null);
-
+    const [yellowSelected, setYellowSelected] = useState(null);
     let markerRedID=0;
     let markerBlueID=0;
     let markerGreyID=0;
-
+    let markerYellowID=0;
 
 
 
@@ -129,7 +132,7 @@ function MyComponent() {
         getMarkersFromServer(redGetUrl,markerRedID,setRedMarkers);
         getMarkersFromServer(blueGetUrl,markerBlueID,setBlueMarkers);
         getMarkersFromServer(greyGetUrl,markerGreyID,setGreyMarkers);
-
+        getMarkersFromServer(yellowGetUrl,markerYellowID,setYellowMarkers);
     },[]);
 
 
@@ -243,7 +246,7 @@ function MyComponent() {
                                         ]);
 
 
-                                        postToServer(redSelected.lng,redSelected.lat,greyPostUrl);
+                                        postToServer(redSelected.lat,redSelected.lng,greyPostUrl);
 
                                         deleteMarkers(redSelected.lat,redSelected.lng,redDeleteUrl);
                                         setRedMarkers([])
@@ -344,6 +347,7 @@ function MyComponent() {
                     <InfoWindow
 
                         position={{ lat: greySelected.lat+0.0003, lng: greySelected.lng }}
+
                         onCloseClick={() => {
                             setGreySelected(null);
 
@@ -363,6 +367,87 @@ function MyComponent() {
                                     }}
                             >
                                 Remove</button>
+                        </div>
+
+
+
+                    </InfoWindow>
+                ) : null}
+                //------------------------------------------------yellow
+                {  yellowMarkers.map((markerYellow)=>(
+                    markerYellowID++,
+
+
+                        <Marker
+                            key={markerYellowID}
+                            icon = {{
+                                url : "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_yellow.png",
+                                scaledSize: new window.google.maps.Size(25,43)}}
+                            position={{ lat: parseFloat(markerYellow.lat), lng: parseFloat(markerYellow.lng) }}
+                            onClick={() => {
+                                setYellowSelected(markerYellow);
+                                console.log(markerYellowID)
+                                console.log(markerYellow.lat);
+                            }}
+
+
+                        />
+
+
+                ))}
+
+                {yellowSelected ? (
+
+                    <InfoWindow
+
+                        position={{ lat: yellowSelected.lat+0.0003, lng: yellowSelected.lng }}
+
+                        onCloseClick={() => {
+                            setYellowSelected(null);
+
+                        }}
+                    >
+                        <div>
+                            <h2> Possible Ambrosia!</h2>
+
+
+                            <button className={"removeYellow-marker"}
+                                    onClick={()=>{
+                                        console.log("deleted");
+                                        deleteMarkers(yellowSelected.lat,yellowSelected.lng,yellowDeleteUrl);
+
+                                        setYellowMarkers([])
+                                        getMarkersFromServer(yellowGetUrl,markerYellowID,setYellowMarkers);
+                                        setYellowSelected(null);
+
+                                    }}
+                            >
+                                Remove</button>
+                            <button className={"forSure-marker"}
+                                    onClick={()=>{
+                                        console.log("transformat in gri");
+                                        setRedMarkers((current)=> [
+                                            ... current,
+                                            {
+
+                                                lat : yellowSelected.lat,
+                                                lng : yellowSelected.lng,
+                                                id : markerRedID,
+
+                                            },
+                                        ]);
+
+
+                                        postToServer(yellowSelected.lat,yellowSelected.lng,redPostUrl);
+
+                                        deleteMarkers(yellowSelected.lat,yellowSelected.lng,yellowDeleteUrl);
+                                        setYellowMarkers([])
+                                        getMarkersFromServer(yellowGetUrl,markerYellowID,setYellowMarkers);
+                                        setYellowSelected(null);
+
+
+                                    }}
+                            >For sure!</button>
                         </div>
 
 

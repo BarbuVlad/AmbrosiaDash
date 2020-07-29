@@ -41,8 +41,43 @@
     background-color:#cb2d40 ;
 
 }
+.removeBlue-marker:hover{
+    background-color:#cb2d40 ;
+
+}
+.removeGrey-marker:hover{
+    background-color:#cb2d40 ;
+
+}
+.transform-marker:hover{
+    background-color:#cb2d40 ;
+
+}
 .transform-marker
 {
+    width: 107px;
+    height: 25px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 700;
+    color: white;
+    background-color:#23c7ac;
+    border: none;
+    border-radius: 45px;
+    box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    display: block;
+
+}
+
+.forSure-marker
+{
+    position: relative;
+    left :22%;
     width: 107px;
     height: 25px;
     font-family: 'Manrope', sans-serif;
@@ -84,6 +119,29 @@
     margin-bottom: 5px;
 }
 .removeGrey-marker
+{
+    position: relative;
+    left :22%;
+    width: 107px;
+    height: 25px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 700;
+    color: white;
+    background-color:#23c7ac;
+    border: none;
+    border-radius: 45px;
+    box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.removeYellow-marker
 {
     position: relative;
     left :22%;
