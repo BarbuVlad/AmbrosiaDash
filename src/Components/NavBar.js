@@ -11,6 +11,9 @@ import GMaps from "./GMaps"
 import mapsIcon from "../Icons/maps-icon.png"
 import volIcon from "../Icons/vol-icon.png"
 import logoAmb from "../Logo/AmbrosiaLogo.png"
+
+import {DropDownMenu}  from "./GMaps"
+
 import logoAmb1 from "../Logo/logo.png"
 // Each logical "route" has two components, one for
 // the sidebar and one for the main area. We want to
@@ -63,6 +66,8 @@ let NavBar =()=> {
 
                         </li>
                     </ul>
+
+                    <DropDownMenu/>
 
                     <Switch>
                         {routes.map((route, index) => (

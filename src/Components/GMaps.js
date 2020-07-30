@@ -5,7 +5,8 @@ import Locate from "./Locate"
 import "@reach/combobox/styles.css";
 import "./GMaps.css"
 import axios from 'axios'
-import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Select from "react-select";
+
 
 
 let redPostUrl = 'http://92.87.91.16/backend_code/api/red_marker/create.php';
@@ -24,6 +25,13 @@ let yellowPostUrl='http://92.87.91.16/backend_code/api/yellow_marker/create.php'
 let yellowGetUrl='http://92.87.91.16/backend_code/api/yellow_marker/read.php';
 let yellowDeleteUrl='http://92.87.91.16/backend_code/api/yellow_marker/delete.php';
 
+const options = [
+    { value: -1, label: 'None' },
+    { value: 0, label: 'Place Markers' },
+    { value: 1, label: 'Place Zone' },
+];
+
+
 const containerStyle = {
     width: 'relative',
     height: '100%',
@@ -41,6 +49,7 @@ const center = {
 
 function postToServer(lat,lng,url)
 {
+
     const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
 
     axios.post(proxyurl+url,
@@ -612,3 +621,22 @@ function MyComponent() {
 }
 
 export default React.memo(MyComponent)
+
+ export function DropDownMenu() {
+
+    const[selectedOption,setSelectedOption] = useState(-1)
+    const handleChange = selectedOption => {
+        setSelectedOption(selectedOption)
+        console.log(`Option selected:`, selectedOption);
+    };
+
+    return (
+        <Select
+            value={selectedOption}
+            onChange={handleChange}
+            options={options}
+            placeholder={"Options"}
+        />
+    );
+
+}
