@@ -29,6 +29,7 @@ let zonePostUrl='';
 let zoneGetUrl='';
 let zoneDeleteUrl='';
 
+let button =-1;
 const containerStyle = {
     width: 'relative',
     height: '100%',
@@ -294,22 +295,41 @@ function MyComponent() {
     },[]);
 
 
+        const onMapClick = React.useCallback((e) => {
+            if(button==0){
+                markerRedID++;
+            setRedMarkers((current) => [
+                ...current,
+                {
 
-    const onMapClick = React.useCallback((e)=>{
-        markerYellowID++;
-        setYellowMarkers((current)=> [
-            ... current,
-            {
+                    lat: e.latLng.lat(),
+                    lng: e.latLng.lng(),
+                    id: markerRedID,
 
-                lat : e.latLng.lat(),
-                lng : e.latLng.lng(),
-                id : markerYellowID,
-
-            },
-        ]);
+                },
+            ]);
 //apelare addserver
-        postToServer(e.latLng.lat(),e.latLng.lng(),yellowPostUrl)
-    },[]);
+            postToServer(e.latLng.lat(), e.latLng.lng(), redPostUrl)}
+            if(button==1)
+            {
+                zoneID++;
+                setZone((current) => [
+                    ...current,
+                    {
+
+                        lat: e.latLng.lat(),
+                        lng: e.latLng.lng(),
+                        id: zoneID,
+
+                    },
+                ]);
+//apelare addserver
+                postToServer(e.latLng.lat(), e.latLng.lng(), zonePostUrl)
+            }
+        }, []);
+
+
+
     /*const onZoneLoad = polygon => {
         console.log("polygon: ", polygon);
     }*/
@@ -496,7 +516,7 @@ function MyComponent() {
                         }}
                     >
                         <div>
-                            <h2> Possibile Ambrosia!</h2>
+                            <h2> Possibile <br/>  Ambrosia!</h2>
                             <button className={"removeBlue-marker"}
                                     onClick={()=>{
                                         console.log("deleted");
@@ -552,7 +572,7 @@ function MyComponent() {
                         }}
                     >
                         <div>
-                            <h2> There was Ambrosia!</h2>
+                            <h2> There was  <br/>  Ambrosia!</h2>
                             <button className={"removeGrey-marker"}
                                     onClick={()=>{
                                         console.log("deleted");
@@ -607,7 +627,7 @@ function MyComponent() {
                         }}
                     >
                         <div>
-                            <h2> Possible Ambrosia!</h2>
+                            <h2>   Possible   <br/>  Ambrosia!  </h2>
 
 
                             <button className={"removeYellow-marker"}
@@ -712,7 +732,7 @@ function MyComponent() {
                         }}
                     >
                         <div>
-                            <h2> There IS Ambrosia!</h2>
+                            <h2> There IS <br/>  Ambrosia!</h2>
                             <button className={"removeGrey-marker"}
                                     onClick={()=>{
                                         console.log("deleted");
