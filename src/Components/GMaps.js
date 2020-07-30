@@ -5,6 +5,7 @@ import Locate from "./Locate"
 import "@reach/combobox/styles.css";
 import "./GMaps.css"
 import axios from 'axios'
+import {marker} from "leaflet/dist/leaflet-src.esm";
 
 import Select from "react-select";
 
@@ -52,6 +53,32 @@ const center = {
     lat: 45.760696,
     lng: 21.226788
 };
+function PushToServer(e)
+{
+    const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
+
+    axios.post(proxyurl+'http://92.87.91.16/backend_code/api/red_marker/create.php',
+        {
+            "latitude":e.latLng.lng(),
+            "longitude": e.latLng.lat()
+
+
+
+        }
+    ).then(console.log("LATLONG"+e.latLng)
+    )
+}
+/*function DeleteRedMarkers(e) {
+    axios.delete('http://92.87.91.16/backend_code/api/red_marker/delete.php',
+        {
+            "latitude":  e.latLng.lng().toString(),
+            "longitude": e.latLng.lat().toString()
+        }
+
+    ).then(
+        data => console.log(data, " a fost sters")
+    )
+}*/
 
 function postToServer(lat,lng,url)
 {
@@ -267,6 +294,7 @@ function MyComponent() {
 
         }
         axios.delete(url,
+
             {
                 data
             }
@@ -289,6 +317,7 @@ function MyComponent() {
     const [blueSelected, setBlueSelected] = useState(null);
     const [greySelected, setGreySelected] = useState(null);
     const [yellowSelected, setYellowSelected] = useState(null);
+
 
     const [zone,setZone]=useState([]);
     const [zoneSelected,setZoneSelected]=useState(null);
@@ -322,6 +351,7 @@ function MyComponent() {
         getMarkersFromServer(greyGetUrl,markerGreyID,setGreyMarkers);
         getMarkersFromServer(yellowGetUrl,markerYellowID,setYellowMarkers);
         //getMarkersFromServer(zoneGetUrl,zoneID,setZone);
+
     },[]);
 
 
@@ -432,6 +462,7 @@ function MyComponent() {
                     markerRedID++,
 
 
+
                         <Marker
                             key={markerRedID}
                             position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
@@ -440,6 +471,7 @@ function MyComponent() {
                                 console.log(markerRedID)
                                 console.log(marker.lat);
                             }}
+
 
 
                         />
@@ -463,6 +495,7 @@ function MyComponent() {
 
                             <button className={"remove-marker"}
                                     onClick={()=>{
+
                                         console.log("deleted");
 
                                         deleteMarkers(convToTen(parseFloat(redSelected.lat)), convToTen(parseFloat(redSelected.lng)), redDeleteUrl, "red");
