@@ -15,6 +15,7 @@ import logoAmb from "../Logo/AmbrosiaLogo.png"
 import {DropDownMenu}  from "./GMaps"
 
 import logoAmb1 from "../Logo/logo.png"
+import Redirect from "react-router-dom/es/Redirect";
 // Each logical "route" has two components, one for
 // the sidebar and one for the main area. We want to
 // render both of them in different places when the
@@ -70,6 +71,7 @@ let NavBar =()=> {
                     <DropDownMenu/>
 
                     <Switch>
+                        <Redirect from="/" to="/Components/Maps"/>
                         {routes.map((route, index) => (
                             // You can render a <Route> in as many places
                             // as you want in your app. It will render along
