@@ -36,7 +36,7 @@ let zonePostUrl='';
 let zoneGetUrl='';
 let zoneDeleteUrl='';
 
-let button =-1;
+
 
 const containerStyle = {
     width: 'relative',
@@ -58,7 +58,7 @@ function postToServer(lat,lng,url)
 
     const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
 
-    axios.post(proxyurl+url,
+    axios.post(url,
         {
             "latitude":lat,
             "longitude":lng
@@ -68,29 +68,7 @@ function postToServer(lat,lng,url)
         }
     ).then(console.log("LATLONG")
     )
-}/*
-function deleteMarkers(lat,lng,url) {
-
-    //stergere din markers
-
-    let data ={
-        "latitude": lat.toString(),
-        "longitude": lng.toString()
-
-    }
-    axios.delete(url,
-        {
-            data
-        }
-
-    ).then(
-        data => console.log(data, " a fost sters")
-
-    )
-    console.log(lat,lng)
-
-
-}*/
+}
 function getMarkersFromServer(url,markerID,setMarkers)
 {
     axios.get(url)
@@ -117,6 +95,29 @@ function getMarkersFromServer(url,markerID,setMarkers)
 
             }
         );
+}
+
+let opt = -1
+
+export function DropDownMenu() {
+
+    const[selectedOption,setSelectedOption] = useState(-1)
+    const handleChange = selectedOption => {
+        setSelectedOption(selectedOption)
+        opt = selectedOption
+        console.log(`Option selected:`, selectedOption);
+        console.log("OPT: "+ opt.value)
+    };
+
+    return (
+        <Select
+            value={selectedOption}
+            onChange={handleChange}
+            options={options}
+            placeholder={"Options"}
+        />
+    );
+
 }
 
 
@@ -150,7 +151,7 @@ function MyComponent() {
         let j;
         let tempMarkers=[]
         //------------------------------------------------red
-        if(color=="red")
+        if(color === "red")
             for(let i = 0; i < redMarkers.length;i++)
             {
 
@@ -216,7 +217,7 @@ function MyComponent() {
             }
         tempMarkers=[];
         //------------------------------------------yellow
-        if(color=="yellow")
+        if(color==="yellow")
             for(let i = 0; i < yellowMarkers.length;i++)
             {
 
@@ -236,7 +237,27 @@ function MyComponent() {
 
                 }
             }
+        tempMarkers=[];
+        //------------------------------------------zone
+        if(color==="zone")
+            for(let i = 0; i < zone.length;i++)
+            {
 
+
+                if(convToTen(parseFloat(zone[i].lat)) === lat && convToTen(parseFloat(zone[i].lng)) === lng)
+                {
+                    j=i;
+                    for(let i=0;i<j;i++)
+                        tempMarkers.push(zone[i]);
+                    for(let i=j+1;i< zone.length;i++)
+                        tempMarkers.push(zone[i]);
+
+                    setZone(tempMarkers)
+                    console.log(" zone"+ zone)
+
+
+                }
+            }
 
         //stergere din markers(DB)
 
@@ -304,9 +325,9 @@ function MyComponent() {
     },[]);
 
 
-        const onMapClick = React.useCallback((e) => {
-            if(button==0){
-                markerRedID++;
+    const onMapClick = React.useCallback((e) => {
+        if(opt.value === 0){
+            markerRedID++;
             setRedMarkers((current) => [
                 ...current,
                 {
@@ -318,24 +339,25 @@ function MyComponent() {
                 },
             ]);
 //apelare addserver
-            postToServer(e.latLng.lat(), e.latLng.lng(), redPostUrl)}
-            if(button==1)
-            {
-                zoneID++;
-                setZone((current) => [
-                    ...current,
-                    {
+            postToServer(e.latLng.lat(), e.latLng.lng(), redPostUrl)
+        }
+        if( opt.value === 1)
+        {
+            zoneID++;
+            setZone((current) => [
+                ...current,
+                {
 
-                        lat: e.latLng.lat(),
-                        lng: e.latLng.lng(),
-                        id: zoneID,
+                    lat: e.latLng.lat(),
+                    lng: e.latLng.lng(),
+                    id: zoneID,
 
-                    },
-                ]);
+                },
+            ]);
 //apelare addserver
-                postToServer(e.latLng.lat(), e.latLng.lng(), zonePostUrl)
-            }
-        }, []);
+            postToServer(e.latLng.lat(), e.latLng.lng(), zonePostUrl)
+        }
+    }, []);
 
 
 
@@ -686,24 +708,7 @@ function MyComponent() {
                     </InfoWindow>
                 ) : null}
                 }
-                {//polygon
-                    /* {path.map((zone)=>(
-                 <Polygon
 
-                     editable
-                     draggable
-                     path={{lat1:parseFloat(zone.lat1),lng1:parseFloat(zone.lng1),lat2:parseFloat(zone.lat2),lng2:parseFloat(zone.lng2),lat3:parseFloat(zone.lat3),lng3:parseFloat(zone.lng3)}}
-                     // Event used when manipulating and adding points
-                     onMouseUp={onEdit}
-                     // Event used when dragging the whole Polygon
-                     onDragEnd={onEdit}
-                     onLoad={onLoad}
-                     onUnmount={onUnmount}
-                 />
-
-
-
-                 ))}*/}
                 {zone.map((zone)=>(
                     zoneID++,
 
@@ -714,7 +719,7 @@ function MyComponent() {
                             icon = {{
                                 url : "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_green.png",
 
-                                scaledSize: new window.google.maps.Size(30,60)}}
+                                scaledSize: new window.google.maps.Size(35,60)}}
                             style={{opacity: 0.9}}
                             onClick={() => {
                                 setZoneSelected(zone);
@@ -745,7 +750,7 @@ function MyComponent() {
                             <button className={"removeGrey-marker"}
                                     onClick={()=>{
                                         console.log("deleted");
-                                        //deleteMarkers(convToTen(parseFloat(zoneSelected.lat)),convToTen(parseFloat(zoneSelected.lng)),zoneDeleteUrl,"zone");
+                                        deleteMarkers(convToTen(parseFloat(zoneSelected.lat)),convToTen(parseFloat(zoneSelected.lng)),zoneDeleteUrl,"zone");
 
 
                                         setZoneSelected(null);
@@ -768,21 +773,3 @@ function MyComponent() {
 
 export default React.memo(MyComponent)
 
- export function DropDownMenu() {
-
-    const[selectedOption,setSelectedOption] = useState(-1)
-    const handleChange = selectedOption => {
-        setSelectedOption(selectedOption)
-        console.log(`Option selected:`, selectedOption);
-    };
-
-    return (
-        <Select
-            value={selectedOption}
-            onChange={handleChange}
-            options={options}
-            placeholder={"Options"}
-        />
-    );
-
-}
