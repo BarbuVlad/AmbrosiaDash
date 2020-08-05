@@ -20,6 +20,7 @@ export default function Login() {
     function handleSubmit(event) {
         event.preventDefault();
     }
+/*
 
    let checkAcc = () =>
     {
@@ -35,13 +36,33 @@ export default function Login() {
 
 
     }
+*/
+
+    let checkAcc = () => {
+        const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
+        axios.post(proxyurl+'http://92.87.91.16/backend_code/api/admins/login.php',
+
+
+            {
+                name: email,
+                password: password
+
+
+
+            }
+        ).then(res =>{
+            setServerAnswer(res.data.message)
+        console.log(serverAnswer)})
+
+
+    }
 
 
 
 
         // daca are al doilea argument,atunci se comporta exact ca si componentDidMount
 
-    if(serverAnswer === 'yes')
+    if(serverAnswer === "login successfull")
     {
         return(
             <NavBar/>
@@ -62,8 +83,7 @@ export default function Login() {
 
                             <FormControl
                                 className ='EmailBox'
-
-                                type="email"
+                                type='email'
                                 value={email}
                                 placeholder = 'Email'
                                 onChange={e => setEmail(e.target.value)}
