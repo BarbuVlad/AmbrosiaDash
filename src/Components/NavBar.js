@@ -11,11 +11,13 @@ import GMaps from "./GMaps"
 import mapsIcon from "../Icons/maps-icon.png"
 import volIcon from "../Icons/vol-icon.png"
 import logoAmb from "../Logo/AmbrosiaLogo.png"
-
+import Login from "./Login"
 import {DropDownMenu}  from "./GMaps"
+import { useHistory } from "react-router-dom";
 
 import logoAmb1 from "../Logo/logo.png"
 import Redirect from "react-router-dom/es/Redirect";
+
 // Each logical "route" has two components, one for
 // the sidebar and one for the main area. We want to
 // render both of them in different places when the
@@ -28,7 +30,7 @@ import Redirect from "react-router-dom/es/Redirect";
 const routes = [
 
     {
-        path: "/Components/Maps",
+        path: "/Components/GMaps",
         sidebar: () => <div> </div>,
         main: () => <GMaps/>,
         exact:true
@@ -37,10 +39,23 @@ const routes = [
         path: "/Components/Volunteers",
         sidebar: () => <div> </div>,
         main: () => <Volunteers/>
+    },
+    {
+        path: "/Components/Login",
+        sidebar: () => <div> </div>,
+        main: () => <Login/>
     }
 ];
+let handleLoggOff = () => {
+    localStorage.setItem('logged', 'unregistered')
+    const logged = localStorage.getItem('logged')
+    console.log(logged)
+
+
+}
 
 let NavBar =()=> {
+
     return (
 
         <Router>
@@ -55,7 +70,7 @@ let NavBar =()=> {
                         <li>
                             <div className={'b'}>
                                 <img className={"maps-icon"} src={mapsIcon} alt ={"mapsIcon"}/>
-                                <Link to="/Components/Maps"> Maps</Link>
+                                <Link to="/Components/GMaps"> Maps</Link>
                             </div>
 
                         </li>
@@ -66,6 +81,23 @@ let NavBar =()=> {
                             </div>
 
                         </li>
+
+                        <li>
+                            <div className={'b'}>
+
+                                <button className={'loggOff-buton'} onClick={ () =>
+                                    {
+                                        handleLoggOff();
+                                        window.location.reload(false);
+                                    }
+                                }
+                                > Logg OFF</button>
+
+
+                            </div>
+                        </li>
+
+
                     </ul>
 
                     <DropDownMenu/>
@@ -104,6 +136,7 @@ let NavBar =()=> {
                         ))}
                     </Switch>
                 </div>
+
             </div>
         </Router>
     );

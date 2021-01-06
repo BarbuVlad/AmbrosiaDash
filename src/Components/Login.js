@@ -20,23 +20,7 @@ export default function Login() {
     function handleSubmit(event) {
         event.preventDefault();
     }
-/*
 
-   let checkAcc = () =>
-    {
-        let lnk = 'http://92.87.91.16/backend_code/api/admins/login.php?name='+email+'&password='+password
-        axios.get(lnk, {
-
-        }).then(
-            res =>{
-               setServerAnswer(res.data.allow)
-
-            }
-        )
-
-
-    }
-*/
 
     let checkAcc = () => {
         const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
@@ -60,10 +44,9 @@ export default function Login() {
 
 
 
-        // daca are al doilea argument,atunci se comporta exact ca si componentDidMount
-
-    if(serverAnswer === "login successfull")
+    if(serverAnswer ==="login successfull")
     {
+        localStorage.setItem('logged', serverAnswer )
         return(
             <NavBar/>
         );

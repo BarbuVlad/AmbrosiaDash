@@ -7,7 +7,7 @@ import "./GMaps.css"
 import axios from 'axios'
 import { Circle } from '@react-google-maps/api';
 import Select from "react-select";
-import {circle} from "leaflet/dist/leaflet-src.esm";
+
 
 let redPostUrl = 'http://92.87.91.16/backend_code/api/red_marker/create.php';
 let redGetUrl = "http://92.87.91.16/backend_code/api/red_marker/read.php";
@@ -28,8 +28,8 @@ let opt = -1
 const options = [
     { value: -1, label: 'None' },
     { value: 0, label: 'Place Markers' },
-    { value: 1, label: 'Place Zones' },
-    { value: 2, label: 'Edit Zones' },
+    //{ value: 1, label: 'Place Zones' },
+    //{ value: 2, label: 'Edit Zones' },
 ];
 
 
@@ -59,7 +59,7 @@ function postToServer(lat,lng,url)
 
     const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
 
-    axios.post(url,
+    axios.post(proxyurl+url,
         {
             "longitude":lng,
             "latitude":lat
@@ -167,7 +167,7 @@ function MyComponent() {
             }
         tempMarkers=[];
         //------------------------------------------blue
-        if(color=="blue")
+        if(color==="blue")
             for(let i = 0; i < blueMarkers.length;i++)
             {
 
@@ -189,7 +189,7 @@ function MyComponent() {
             }
         tempMarkers=[];
         //------------------------------------------grey
-        if(color=="grey")
+        if(color==="grey")
             for(let i = 0; i < greyMarkers.length;i++)
             {
 
@@ -359,6 +359,7 @@ function MyComponent() {
 
 
     let alwaysGetMarkers =()=>{
+
         setRedMarkers([])
         setBlueMarkers([])
         setGreyMarkers([])
@@ -369,7 +370,7 @@ function MyComponent() {
         getMarkersFromServer(greyGetUrl,markerGreyID,setGreyMarkers);
         getMarkersFromServer(yellowGetUrl,markerYellowID,setYellowMarkers);
         getMarkersFromServer(zoneGetUrl,zoneID,setZone);
-        setTimeout(alwaysGetMarkers, 60 * 1000)
+        setTimeout(alwaysGetMarkers, 20 * 1000)
     }
 
     useEffect(() => {
@@ -379,6 +380,7 @@ function MyComponent() {
         getMarkersFromServer(greyGetUrl,markerGreyID,setGreyMarkers);
         getMarkersFromServer(yellowGetUrl,markerYellowID,setYellowMarkers);
         getMarkersFromServer(zoneGetUrl,zoneID,setZone);
+        alwaysGetMarkers();
 
     },[]);
 
@@ -463,7 +465,29 @@ function MyComponent() {
             >
 
                 <Locate panTo={panTo}/>
-                <Search panTo={panTo}/>
+
+                {  redMarkers.map((marker)=>(
+                    markerRedID++,
+
+
+
+                        <Circle
+                            center={{
+                                lat: parseFloat(marker.lat),
+                                lng: parseFloat(marker.lng)
+
+                            }}
+                            radius={500}
+                            options={{fillColor:'#FF0000',
+                                strokeColor:"#8B0000"}}
+                        />
+
+
+
+                ))}
+
+
+
                 {  redMarkers.map((marker)=>(
                     markerRedID++,
 
@@ -479,9 +503,8 @@ function MyComponent() {
                                 console.log(markerRedID)
                                 console.log(marker.lat);
                             }}
-
-
                         />
+
 
 
                 ))}
@@ -649,6 +672,31 @@ function MyComponent() {
                                     }}
                             >
                                 Remove</button>
+                            <button className={"forSure-marker"}
+                                    onClick={()=>{
+                                        console.log("transformat in gri");
+                                        setRedMarkers((current)=> [
+                                            ... current,
+                                            {
+
+                                                lat : greySelected.lat,
+                                                lng : greySelected.lng,
+                                                id : markerGreyID,
+
+                                            },
+                                        ]);
+
+
+                                        postToServer(greySelected.lat,greySelected.lng,redPostUrl);
+
+                                        deleteMarkers(convToTen(parseFloat(greySelected.lat)), convToTen(parseFloat(greySelected.lng)), greyDeleteUrl, "grey");
+
+
+                                        setGreySelected(null);
+
+
+                                    }}
+                            >reappeared</button>
                         </div>
 
 
@@ -737,83 +785,7 @@ function MyComponent() {
                 ) : null}
                 }
 
-                {zone.map((zone)=>(
 
-
-
-
-                    <Circle
-
-                    key={zoneID}
-                    // optional
-                    onLoad={onZoneLoad}
-                    // optional
-                    onUnmount={onZoneUnmount}
-                    // required
-                    center={centru(parseFloat(zone.lat), parseFloat(zone.lng) )}
-                    // required
-
-                    options={editZones()}
-                    radius={zone.radius}
-
-                    onClick={() => {
-                        if(opt.value!=2)
-                        setZoneSelected(zone);
-                        else
-                            setEdit(zone.lat);
-                        console.log(zoneOptionsFalse)
-                        console.log("radius ")
-                        console.log(zone.lat);
-
-                    }}
-
-                    onRadiusChanged={() => {}}
-                    />
-
-
-                    ))}
-
-                {zoneSelected ? (
-
-                    <InfoWindow
-
-                        position={{ lat: zoneSelected.lat+0.0003, lng: zoneSelected.lng }}
-
-                        onCloseClick={() => {
-
-                            setZoneSelected(null);
-
-
-                        }}
-                    >
-                        <div>
-                            <h2> Ambrosia!</h2>
-
-
-                            <button className={"remove-marker"}
-                                    onClick={()=>{
-                                        console.log("deleted");
-
-
-                                        deleteMarkers(convToTen(parseFloat(zoneSelected.lat)), convToTen(parseFloat(zoneSelected.lng)), zoneDeleteUrl, "zone");
-                                        setZoneSelected(null);
-
-                                    }}
-                            >
-                                Remove</button>
-
-
-                        </div>
-
-
-
-
-
-
-
-                    </InfoWindow>
-                ) : null}
-                }
 
 
 
