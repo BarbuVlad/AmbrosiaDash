@@ -30,7 +30,7 @@ import Redirect from "react-router-dom/es/Redirect";
 const routes = [
 
     {
-        path: "/Components/GMaps",
+        path: "/Components/Maps",
         sidebar: () => <div> </div>,
         main: () => <GMaps/>,
         exact:true
@@ -70,7 +70,7 @@ let NavBar =()=> {
                         <li>
                             <div className={'b'}>
                                 <img className={"maps-icon"} src={mapsIcon} alt ={"mapsIcon"}/>
-                                <Link to="/Components/GMaps"> Maps</Link>
+                                <Link to="/Components/Maps"> Maps</Link>
                             </div>
 
                         </li>
