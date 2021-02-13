@@ -60,10 +60,13 @@ color: white;
     color:white;
     font-size: 25px;
 }
-.loggOff-button{
-    margin: 10px 10px 10px 0;
-    color: white;
-    text-decoration: none;
-    font-family: 'Manrope', sans-serif;
-    font-size: 22px;
+
+.signOutBorder{
+    position: absolute;
+    padding-bottom: 7px;
+    left:0;
+    bottom:20px;
+    right:0;
+
 }
+

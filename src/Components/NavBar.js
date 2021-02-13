@@ -12,11 +12,11 @@ import mapsIcon from "../Icons/maps-icon.png"
 import volIcon from "../Icons/vol-icon.png"
 import logoAmb from "../Logo/AmbrosiaLogo.png"
 import Login from "./Login"
-import {DropDownMenu}  from "./GMaps"
-import { useHistory } from "react-router-dom";
-
-import logoAmb1 from "../Logo/logo.png"
+import {DropDownMenu,CheckboxMarker}  from "./GMaps"
+import Button from '@material-ui/core/Button';
 import Redirect from "react-router-dom/es/Redirect";
+import { createMuiTheme, withStyles, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+
 
 // Each logical "route" has two components, one for
 // the sidebar and one for the main area. We want to
@@ -46,22 +46,46 @@ const routes = [
         main: () => <Login/>
     }
 ];
-let handleLoggOff = () => {
+let handleLogOut = () => {
     localStorage.setItem('logged', 'unregistered')
     const logged = localStorage.getItem('logged')
     console.log(logged)
 
 
 }
+const ColorButton = withStyles((theme) => ({
+    root: {
+        color: theme.palette.getContrastText("#2b313d"),
+        backgroundColor: "#2b313d",
+        '&:hover': {
+            backgroundColor: "#1fb299",
+        },
+    },
+}))(Button);
+const useStyles = makeStyles((theme) => ({
+    margin: {
+        margin: theme.spacing(1),
+    },
+}));
+
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            main: "#0062cc",
+        },
+    },
+});
 
 let NavBar =()=> {
-
+const classes = useStyles();
     return (
 
         <Router>
+
             <div className={"PanelPos"}>
                 <div className={"Panel"} >
                     <div className={"ambrosia-title"}>
+
                         <img className={"logo"} src={logoAmb} alt ={"logoAmb"}/>
                         Ambrosia Alert
                     </div>
@@ -72,7 +96,6 @@ let NavBar =()=> {
                                 <img className={"maps-icon"} src={mapsIcon} alt ={"mapsIcon"}/>
                                 <Link to="/Components/Maps"> Maps</Link>
                             </div>
-
                         </li>
                         <li>
                             <div className={'b'}>
@@ -81,27 +104,24 @@ let NavBar =()=> {
                             </div>
 
                         </li>
-
-                        <li>
-                            <div className={'b'}>
-
-                                <button className={'loggOff-buton'} onClick={ () =>
-                                    {
-                                        handleLoggOff();
-                                        window.location.reload(false);
-                                    }
-                                }
-                                > Logg OFF</button>
-
-
-                            </div>
-                        </li>
-
-
                     </ul>
 
                     <DropDownMenu/>
-
+                    <div className={'b'}>
+                    <CheckboxMarker/>
+                    </div>
+                    <div className={'signOutBorder'}>
+                        <ThemeProvider theme={theme}>
+                        <ColorButton   variant={'outlined'} className={classes.margin} onClick={ () =>
+                        {
+                            handleLogOut();
+                            window.location.reload(false);
+                        }
+                        }
+                        >Sign out
+                        </ColorButton>
+                        </ThemeProvider>
+                    </div>
                     <Switch>
                         <Redirect from="/" to="/Components/Maps"/>
                         {routes.map((route, index) => (

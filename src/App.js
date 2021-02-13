@@ -1,14 +1,9 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
-import Login, {serverAnswer} from "./Components/Login";
+
+import Login from "./Components/Login";
 import NavBar from "./Components/NavBar";
 
-//import NavBar from "./Components/NavBar";
+
 
 
   let App = () => {
@@ -20,9 +15,9 @@ import NavBar from "./Components/NavBar";
       )}
       else
   return (
-   <Login/>
+   //<Login/>
+<NavBar/>
 
-  //   <NavBar/>
   );
 };
 

@@ -109,7 +109,7 @@ console.log("Voldata: " + this.state.VolData)
 
             onRowsDelete: (rowsDeleted)=>{
                 console.log("datele: ",rowsDeleted)
-               const data1 = this.props.data;
+               //const data1 = this.props.data;
             //    const idsToDelete = rowsDeleted.data.map(d => data1[d.dataIndex]) // array of all ids to to be deleted
            console.log("onRowsDelete: ",rowsDeleted.data)
              //   console.log("DATA: ",rowsDeleted.data)
@@ -127,7 +127,7 @@ console.log("Voldata: " + this.state.VolData)
                     axios.delete('http://92.87.91.16/backend_code/api/volunteer/delete.php',
 
                         {
-data
+                                    data
 
                         }
 

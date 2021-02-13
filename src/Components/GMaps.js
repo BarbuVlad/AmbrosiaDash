@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { GoogleMap,Marker,InfoWindow} from '@react-google-maps/api';
-import Search from './Search'
 import Locate from "./Locate"
 import "@reach/combobox/styles.css";
 import "./GMaps.css"
 import axios from 'axios'
 import { Circle } from '@react-google-maps/api';
 import Select from "react-select";
-
-
+import { Multiselect} from "multiselect-react-dropdown";
+//import Search from './Search'
 let redPostUrl = 'http://92.87.91.16/backend_code/api/red_marker/create.php';
 let redGetUrl = "http://92.87.91.16/backend_code/api/red_marker/read.php";
 let redDeleteUrl = 'http://92.87.91.16/backend_code/api/red_marker/delete.php';
-
 
 let blueGetUrl = 'http://92.87.91.16/backend_code/api/blue_marker/read.php';
 let blueDeleteUrl = 'http://92.87.91.16/backend_code/api/blue_marker/delete.php';
@@ -21,10 +19,12 @@ let greyPostUrl='http://92.87.91.16/backend_code/api/grey_marker/create.php';
 let greyGetUrl = 'http://92.87.91.16/backend_code/api/grey_marker/read.php';
 let greyDeleteUrl = 'http://92.87.91.16/backend_code/api/grey_marker/delete.php';
 
-let yellowPostUrl='http://92.87.91.16/backend_code/api/yellow_marker/create.php';
+//let yellowPostUrl='http://92.87.91.16/backend_code/api/yellow_marker/create.php';
 let yellowGetUrl='http://92.87.91.16/backend_code/api/yellow_marker/read.php';
 let yellowDeleteUrl='http://92.87.91.16/backend_code/api/yellow_marker/delete.php';
+
 let opt = -1
+let markerList=[];
 const options = [
     { value: -1, label: 'None' },
     { value: 0, label: 'Place Markers' },
@@ -32,27 +32,27 @@ const options = [
     //{ value: 2, label: 'Edit Zones' },
 ];
 
+const markerOption=[
+    {id: 0,name :'Red'},
+    {id: 1, name :'Blue'},
+    {id: 2, name :'Yellow'},
+    {id: 3, name :'Grey'},
+    {id: 4, name :'Zone'}
+]
 
-
-let resizeZone=false;
-
+const redMarkerVar=[];
+const blueMarkerVar=[];
+const yellowMarkerVar=[];
+const greyMarkerVar=[];
+const zoneVar=[];
 let zonePostUrl='';
 let zoneGetUrl='';
-let zoneDeleteUrl='';
-
+//let zoneDeleteUrl=''; util in momentul in care zonele o sa fie un obiect diferit fata de markerele rosii.
 
 const center = {
     lat: 45.760696,
     lng: 21.226788
 };
-function centru (lat,lng)
-{
-    const center ={
-        lat : lat,
-        lng : lng
-    }
-    return center;
-}
 
 function postToServer(lat,lng,url)
 {
@@ -63,43 +63,9 @@ function postToServer(lat,lng,url)
         {
             "longitude":lng,
             "latitude":lat
-
-
-
-
         }
-    ).then(console.log("LATLONG")
-    )
+    ).then(console.log("LATLONG"))
 }
-function getMarkersFromServer(url,markerID,setMarkers)
-{
-    axios.get(url)
-        .then(
-            res => {
-                console.log(res.data.data);
-                for (let i = 0; i < res.data.data.length; i++) {
-                    markerID = i;
-
-
-                    setMarkers((current) => [
-                        ...current,
-                        {
-                            lng: parseFloat(res.data.data[i].longitude),
-                            lat: parseFloat(res.data.data[i].latitude),
-                            id: i,
-
-                        },
-                    ]);
-
-
-
-                }
-
-            }
-        );
-}
-
-
 
 export function DropDownMenu() {
 
@@ -117,18 +83,37 @@ export function DropDownMenu() {
             onChange={handleChange}
             options={options}
             placeholder={"Options"}
+
         />
     );
 
 }
 
+export function CheckboxMarker() {
+    const [selectedMarkers,setSelectedMakers] = useState(markerOption);
 
+    const onSelect=(selectedMarkers)=>{
+        markerList=selectedMarkers;
+        console.log(markerList);
+    }
+    const onRemove=(selectedMarkers)=>{
+        markerList=selectedMarkers;
+    }
+    return(
+        <div className={'checkbox'}>
+           <Multiselect
+               options={selectedMarkers}
+               displayValue="name"
+               placeholder={"Select the markers"}
+               onSelect={onSelect}
+               onRemove={onRemove}
 
+               />
+        </div>
+    )
+}
 
 function MyComponent() {
-
-
-
 
     let convToTen =(num)=>  //conversie la 10 zecimale
     {
@@ -138,118 +123,66 @@ function MyComponent() {
     //---------------------delte
     function deleteMarkers(lat,lng,url,color) {
 
-        //remove locally from markers
-        /*
-                lat = convToTen(lat)
-                lng = convToTen(lng)*/
-        let j;
-        let tempMarkers=[]
         //------------------------------------------------red
         if(color === "red")
-            for(let i = 0; i < redMarkers.length;i++)
+            for(let i = 0; i < redMarkerVar.length;i++)
             {
-
-                /*     console.log("lat: "+redMarkers[i].lat + "  "+ lat)
-                     console.log("lng: "+ redMarkers[i].lng + "   "+lng)*/
-                if(convToTen(parseFloat(redMarkers[i].lat)) === lat && convToTen(parseFloat(redMarkers[i].lng))=== lng)
+                if(convToTen(parseFloat(redMarkerVar[i].lat)) === lat && convToTen(parseFloat(redMarkerVar[i].lng))=== lng)
                 {
-                    j=i;
-                    for(let i=0;i<j;i++)
-                        tempMarkers.push(redMarkers[i]);
-                    for(let i=j+1;i< redMarkers.length;i++)
-                        tempMarkers.push(redMarkers[i]);
 
-                    setRedMarkers(tempMarkers)
+                    redMarkerVar.splice(i,1);
+                    setRedMarkers(redMarkerVar)
                     console.log(" red ma"+ redMarkers)
 
 
                 }
             }
-        tempMarkers=[];
+
         //------------------------------------------blue
         if(color==="blue")
-            for(let i = 0; i < blueMarkers.length;i++)
+            for(let i = 0; i < blueMarkerVar.length;i++)
             {
-
-                /*     console.log("lat: "+blueMarkers[i].lat + "  "+ lat)
-                     console.log("lng: "+ blueMarkers[i].lng + "   "+lng)*/
-                if(convToTen(parseFloat(blueMarkers[i].lat)) === lat && convToTen(parseFloat(blueMarkers[i].lng)) === lng)
+                if(convToTen(parseFloat(blueMarkerVar[i].lat)) === lat && convToTen(parseFloat(blueMarkerVar[i].lng)) === lng)
                 {
-                    j=i;
-                    for(let i=0;i<j;i++)
-                        tempMarkers.push(blueMarkers[i]);
-                    for(let i=j+1;i< blueMarkers.length;i++)
-                        tempMarkers.push(blueMarkers[i]);
-
-                    setBlueMarkers(tempMarkers)
+                    blueMarkerVar.splice(i,1);
+                    setBlueMarkers(blueMarkerVar)
                     console.log(" blue ma"+ blueMarkers)
-
-
                 }
             }
-        tempMarkers=[];
+
         //------------------------------------------grey
         if(color==="grey")
-            for(let i = 0; i < greyMarkers.length;i++)
+            for(let i = 0; i < greyMarkerVar.length;i++)
             {
-
-                /*     console.log("lat: "+greyMarkers[i].lat + "  "+ lat)
-                     console.log("lng: "+ greyMarkers[i].lng + "   "+lng)*/
-                if(convToTen(parseFloat(greyMarkers[i].lat)) === lat && convToTen(parseFloat(greyMarkers[i].lng)) === lng)
+                if(convToTen(parseFloat(greyMarkerVar[i].lat)) === lat && convToTen(parseFloat(greyMarkerVar[i].lng)) === lng)
                 {
-                    j=i;
-                    for(let i=0;i<j;i++)
-                        tempMarkers.push(greyMarkers[i]);
-                    for(let i=j+1;i< greyMarkers.length;i++)
-                        tempMarkers.push(greyMarkers[i]);
-
-                    setGreyMarkers(tempMarkers)
+                    greyMarkerVar.splice(i,1);
+                    setGreyMarkers(greyMarkerVar)
                     console.log(" grey ma"+ greyMarkers)
-
-
                 }
             }
-        tempMarkers=[];
+
         //------------------------------------------yellow
         if(color==="yellow")
-            for(let i = 0; i < yellowMarkers.length;i++)
+            for(let i = 0; i < yellowMarkerVar.length;i++)
             {
-
-                /*     console.log("lat: "+yellowMarkers[i].lat + "  "+ lat)
-                     console.log("lng: "+ yellowMarkers[i].lng + "   "+lng)*/
-                if(convToTen(parseFloat(yellowMarkers[i].lat)) === lat && convToTen(parseFloat(yellowMarkers[i].lng)) === lng)
+                if(convToTen(parseFloat(yellowMarkerVar[i].lat)) === lat && convToTen(parseFloat(yellowMarkerVar[i].lng)) === lng)
                 {
-                    j=i;
-                    for(let i=0;i<j;i++)
-                        tempMarkers.push(yellowMarkers[i]);
-                    for(let i=j+1;i< yellowMarkers.length;i++)
-                        tempMarkers.push(yellowMarkers[i]);
-
-                    setYellowMarkers(tempMarkers)
+                    yellowMarkerVar.splice(i,1);
+                    setYellowMarkers(yellowMarkerVar)
                     console.log(" yellow ma"+ yellowMarkers)
-
-
                 }
             }
-        tempMarkers=[];
+
         //------------------------------------------zone
         if(color==="zone")
             for(let i = 0; i < zone.length;i++)
             {
-
-
                 if(convToTen(parseFloat(zone[i].lat)) === lat && convToTen(parseFloat(zone[i].lng)) === lng)
                 {
-                    j=i;
-                    for(let i=0;i<j;i++)
-                        tempMarkers.push(zone[i]);
-                    for(let i=j+1;i< zone.length;i++)
-                        tempMarkers.push(zone[i]);
-
-                    setZone(tempMarkers)
+                    zoneVar.splice(i,1);
+                    setZone(zoneVar)
                     console.log(" zone"+ zone)
-
-
                 }
             }
 
@@ -258,7 +191,6 @@ function MyComponent() {
         let data ={
             "latitude": lat.toString(),
             "longitude": lng.toString()
-
         }
         axios.delete(url,
             {
@@ -273,8 +205,6 @@ function MyComponent() {
 
 
     }
-
-
     const [redMarkers, setRedMarkers] = useState([]);
     const [blueMarkers,setBlueMarkers] = useState([]);
     const [greyMarkers,setGreyMarkers] = useState([]);
@@ -283,43 +213,14 @@ function MyComponent() {
     const [blueSelected, setBlueSelected] = useState(null);
     const [greySelected, setGreySelected] = useState(null);
     const [yellowSelected, setYellowSelected] = useState(null);
-
     const [zone,setZone]=useState([]);
-    const [zoneSelected,setZoneSelected]=useState(null);
+    //const [zoneSelected,setZoneSelected]=useState(null); util in momentul in care zonele o sa fie entitati diferite fata de markerele rosii.
     let zoneID=0;
-
     let markerRedID=0;
     let markerBlueID=0;
     let markerGreyID=0;
     let markerYellowID=0;
 
-
-    let zoneOptionsTrue = {
-        strokeColor: '#FF0000',
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: '#FF0000',
-        fillOpacity: 0.35,
-        clickable: true,
-        draggable: false,
-        editable: true,
-        radius :zone.radius,
-        visible: true,
-        zIndex: 1
-    }
-    let zoneOptionsFalse = {
-        strokeColor: '#FF0000',
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: '#FF0000',
-        fillOpacity: 0.35,
-        clickable: true,
-        draggable: false,
-        editable: false,
-        radius:zone.radius,
-        visible: true,
-        zIndex: 1
-    }
     const containerStyle = {
         width: 'relative',
         height: '100%',
@@ -331,73 +232,94 @@ function MyComponent() {
     };
 
 
-
-    let test=0;
-    const [edit,setEdit]=useState(0);
-    function editZones() {
-
-        if(opt.value === 2)
-        {
-            console.log("val opt "+ opt.value);
-
-
-
-            return zoneOptionsTrue
-
-        }
-        else {
-
-
-
-            return zoneOptionsFalse
-
-        }
-
+    let alwaysGetMarkers = () => {
+        getMarkersFromServer(redGetUrl, markerRedID, redMarkerVar);
+        getMarkersFromServer(blueGetUrl, markerBlueID, blueMarkerVar);
+        getMarkersFromServer(greyGetUrl, markerGreyID, greyMarkerVar);
+        getMarkersFromServer(yellowGetUrl, markerYellowID, yellowMarkerVar);
+        getMarkersFromServer(zoneGetUrl, zoneID, zoneVar);
+        setTimeout(alwaysGetMarkers, 3000)
     }
 
+   function getMarkersFromServer(url,markerID,markersVar)
+    {
+        axios.get(url)
+            .then(
+                res => {
+                    console.log(res.data.data);
+                    for (let i = 0; i < res.data.data.length; i++) {
+                        markerID = i;
+                        const setMarkers=
+                            {
+                                lng: parseFloat(res.data.data[i].longitude),
+                                lat: parseFloat(res.data.data[i].latitude),
+                                id: i,
+                            }
+                        let isInList=false;
 
+                        markersVar.forEach(marker =>{
+                            if((marker.lng === setMarkers.lng) &&(marker.lat === setMarkers.lat) ){
+                                isInList=true;
+                                return;
+                            }
+                        })
+                        if(!isInList){
+                            markersVar.push(setMarkers);
+                        }
+                    }
+                }
+            );
 
+        markerList.map((list)=>((list.id===0))&&
+            setRedMarkers(markersVar),
+        )
+        markerList.map((list)=>((list.id===1))&&
+            setBlueMarkers(markersVar),
+        )
+        markerList.map((list)=>((list.id===2))&&
+            setYellowMarkers(markersVar),
+        )
+        markerList.map((list)=>((list.id===3))&&
+            setGreyMarkers(markersVar),
+        )
+        markerList.map((list)=>((list.id===4))&&
+            setZone(markersVar),
+        )
 
-    let alwaysGetMarkers =()=>{
-
-        setRedMarkers([])
-        setBlueMarkers([])
-        setGreyMarkers([])
-        setYellowMarkers([])
-        setZone([])
-        getMarkersFromServer(redGetUrl,markerRedID,setRedMarkers);
-        getMarkersFromServer(blueGetUrl,markerBlueID,setBlueMarkers);
-        getMarkersFromServer(greyGetUrl,markerGreyID,setGreyMarkers);
-        getMarkersFromServer(yellowGetUrl,markerYellowID,setYellowMarkers);
-        getMarkersFromServer(zoneGetUrl,zoneID,setZone);
-        setTimeout(alwaysGetMarkers, 20 * 1000)
     }
 
     useEffect(() => {
 
-        getMarkersFromServer(redGetUrl,markerRedID,setRedMarkers);
-        getMarkersFromServer(blueGetUrl,markerBlueID,setBlueMarkers);
-        getMarkersFromServer(greyGetUrl,markerGreyID,setGreyMarkers);
-        getMarkersFromServer(yellowGetUrl,markerYellowID,setYellowMarkers);
-        getMarkersFromServer(zoneGetUrl,zoneID,setZone);
+        getMarkersFromServer(redGetUrl,markerRedID,redMarkerVar);
+        getMarkersFromServer(blueGetUrl,markerBlueID,blueMarkerVar);
+        getMarkersFromServer(greyGetUrl,markerGreyID,greyMarkerVar);
+        getMarkersFromServer(yellowGetUrl,markerYellowID,yellowMarkerVar);
+        getMarkersFromServer(zoneGetUrl,zoneID,zoneVar);
         alwaysGetMarkers();
 
+// eslint-disable-next-line
     },[]);
-
 
     const onMapClick = React.useCallback((e) => {
         if(opt.value === 0){
             markerRedID++;
-            setRedMarkers((current) => [
-                ...current,
-                {
+            const setMarkers= {
+                lat: e.latLng.lat(),
+                lng: e.latLng.lng(),
+                id: markerRedID,
+            }
+            let isInList=false;
 
-                    lat: e.latLng.lat(),
-                    lng: e.latLng.lng(),
-                    id: markerRedID,
-
-                },
-            ]);
+            redMarkerVar.forEach(marker =>{
+                if((marker.lng === setMarkers.lng) &&(marker.lat === setMarkers.lat) ){
+                    isInList=true;
+                    return;
+                }
+            })
+            if(!isInList){
+                redMarkerVar.push(setMarkers);
+            }
+            
 //apelare addserver
             postToServer(e.latLng.lat(), e.latLng.lng(), redPostUrl)
         }
@@ -418,17 +340,8 @@ function MyComponent() {
 //apelare addserver
             postToServer(e.latLng.lat(), e.latLng.lng(), zonePostUrl)
         }
-    }, []);
+    }, [markerRedID, zoneID]);
 
-
-
-    const onZoneLoad = circle => {
-        console.log('Circle onLoad circle: ', circle)
-    }
-
-    const onZoneUnmount = circle => {
-        console.log('Circle onUnmount circle: ', circle)
-    }
     const mapRef = React.useRef();
     const onMapLoad = React.useCallback((map) => {
         mapRef.current = map;
@@ -438,22 +351,9 @@ function MyComponent() {
         mapRef.current.setZoom(14);
 
     }, []);
-    function updateRadius() {
-        let updatedRadius= 1000000;
-       return  updatedRadius ;
-    }
+
     return (
-
-
         <div>
-            <h1>
-                Ambrosia{" "}
-
-
-
-            </h1>
-
-
             <GoogleMap
                 id = "map"
                 mapContainerStyle={containerStyle}
@@ -461,16 +361,12 @@ function MyComponent() {
                 zoom={10}
                 onClick={onMapClick}
                 onLoad={onMapLoad}
-
             >
-
                 <Locate panTo={panTo}/>
-
-                {  redMarkers.map((marker)=>(
+                {
+                    markerList.map((list)=>((list.id===4))&&
+                    redMarkerVar.map((marker)=>(// eslint-disable-next-line
                     markerRedID++,
-
-
-
                         <Circle
                             center={{
                                 lat: parseFloat(marker.lat),
@@ -481,19 +377,13 @@ function MyComponent() {
                             options={{fillColor:'#FF0000',
                                 strokeColor:"#8B0000"}}
                         />
-
-
-
-                ))}
-
-
-
-                {  redMarkers.map((marker)=>(
-                    markerRedID++,
-
+                )))}
+                {   markerList.map((list)=>((list.id===0))&&
+                    redMarkerVar.map((marker)=>(
 
                         <Marker
-                            key={markerRedID}
+
+                            key={markerRedID++}
                             position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
                             icon = {{
                                 url : "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_redA.png",
@@ -502,80 +392,63 @@ function MyComponent() {
                                 setRedSelected(marker);
                                 console.log(markerRedID)
                                 console.log(marker.lat);
+
                             }}
                         />
 
-
-
-                ))}
-
+                )))
+                }
                 {redSelected ? (
 
                     <InfoWindow
-
                         position={{ lat: redSelected.lat+0.0003, lng: redSelected.lng }}
-
                         onCloseClick={() => {
                             setRedSelected(null);
-
                         }}
                     >
                         <div>
                             <h2> Ambrosia!</h2>
-
-
                             <button className={"remove-marker"}
                                     onClick={()=>{
                                         console.log("deleted");
-
                                         deleteMarkers(convToTen(parseFloat(redSelected.lat)), convToTen(parseFloat(redSelected.lng)), redDeleteUrl, "red");
-
-
-
-
                                         setRedSelected(null);
-
                                     }}
                             >
                                 Remove</button>
                             <button className={"transform-marker"}
                                     onClick={()=>{
                                         console.log("transformat in gri");
-                                        setGreyMarkers((current)=> [
-                                            ... current,
+                                        const setMarkers=
                                             {
-
                                                 lat : redSelected.lat,
                                                 lng : redSelected.lng,
                                                 id : markerGreyID,
-
-                                            },
-                                        ]);
-
-
+                                            }
+                                        let isInList=false;
+                                        greyMarkerVar.forEach(marker =>{
+                                            if((marker.lng === setMarkers.lng) &&(marker.lat === setMarkers.lat) ){
+                                                isInList=true;
+                                                return;
+                                            }
+                                        })
+                                        if(!isInList){
+                                            greyMarkerVar.push(setMarkers);
+                                        }
+                                        setGreyMarkers(greyMarkerVar)
                                         postToServer(redSelected.lat,redSelected.lng,greyPostUrl);
-
                                         deleteMarkers(convToTen(parseFloat(redSelected.lat)),convToTen(parseFloat(redSelected.lng)),redDeleteUrl,"red");
-
-
                                         setRedSelected(null);
-
-
                                     }}
                             >Eradicated</button>
-
                         </div>
-
-
-
                     </InfoWindow>
                 ) : null}
-                <></>
-                //-------------------------------------------------------------------------------------------BLUE MARKER
-                {blueMarkers.map((markerBlue)=>(
+
+                {/*-------------------------------------------------------------------------------------------BLUE MARKER*/}
+                { markerList.map((list)=>((list.id===1))&&
+                    blueMarkerVar.map((markerBlue)=>(// eslint-disable-next-line
                     markerBlueID++,
-
-
                         <Marker
                             key={markerBlueID}
                             position={{ lat: parseFloat(markerBlue.lat), lng: parseFloat(markerBlue.lng) }}
@@ -586,23 +459,14 @@ function MyComponent() {
                                 setBlueSelected(markerBlue);
                                 console.log(markerRedID)
                                 console.log(markerBlue.lat);
-
                             }}
-
-
                         />
-
-
-
-                ))}
+                )))}
                 {blueSelected ? (
-
                     <InfoWindow
-
                         position={{ lat: blueSelected.lat+0.0003, lng: blueSelected.lng }}
                         onCloseClick={() => {
                             setBlueSelected(null);
-
                         }}
                     >
                         <div>
@@ -611,24 +475,17 @@ function MyComponent() {
                                     onClick={()=>{
                                         console.log("deleted");
                                         deleteMarkers(convToTen(parseFloat(blueSelected.lat)),convToTen(parseFloat(blueSelected.lng)),blueDeleteUrl,"blue");
-
-
                                         setBlueSelected(null);
-
                                     }}
                             >
                                 Remove</button>
                         </div>
-
-
-
                     </InfoWindow>
                 ) : null}
-                //----------------------------------------------------------------------------grey MARKER
-                {greyMarkers.map((markerGrey)=>(
+                {/*----------------------------------------------------------------------------greyMARKER*/}
+                { markerList.map((list)=>((list.id===3))&&
+                    greyMarkerVar.map((markerGrey)=>(// eslint-disable-next-line
                     markerGreyID++,
-
-
                         <Marker
                             key={markerGreyID}
                             position={{ lat: parseFloat(markerGrey.lat), lng: parseFloat(markerGrey.lng) }}
@@ -639,21 +496,13 @@ function MyComponent() {
                                 setGreySelected(markerGrey);
                                 console.log(markerRedID)
                                 console.log(markerGrey.lat);
-
                             }}
-
-
                         />
-
-
-
-                ))}
-                {greySelected ? (
-
+                )))}
+                {
+                    greySelected ? (
                     <InfoWindow
-
                         position={{ lat: greySelected.lat+0.0003, lng: greySelected.lng }}
-
                         onCloseClick={() => {
                             setGreySelected(null);
 
@@ -665,49 +514,43 @@ function MyComponent() {
                                     onClick={()=>{
                                         console.log("deleted");
                                         deleteMarkers(convToTen(parseFloat(greySelected.lat)),convToTen(parseFloat(greySelected.lng)),greyDeleteUrl,"grey");
-
-
                                         setGreySelected(null);
-
                                     }}
                             >
                                 Remove</button>
                             <button className={"forSure-marker"}
                                     onClick={()=>{
                                         console.log("transformat in gri");
-                                        setRedMarkers((current)=> [
-                                            ... current,
+                                        const setMarkers=
                                             {
-
                                                 lat : greySelected.lat,
                                                 lng : greySelected.lng,
-                                                id : markerGreyID,
+                                                id : markerRedID,
 
-                                            },
-                                        ]);
-
-
+                                            }
+                                        let isInList=false;
+                                        redMarkerVar.forEach(marker =>{
+                                            if((marker.lng === setMarkers.lng) &&(marker.lat === setMarkers.lat) ){
+                                                isInList=true;
+                                                return;
+                                            }
+                                        })
+                                        if(!isInList){
+                                            redMarkerVar.push(setMarkers);
+                                        }
+                                        setRedMarkers(redMarkerVar)
                                         postToServer(greySelected.lat,greySelected.lng,redPostUrl);
-
                                         deleteMarkers(convToTen(parseFloat(greySelected.lat)), convToTen(parseFloat(greySelected.lng)), greyDeleteUrl, "grey");
-
-
                                         setGreySelected(null);
-
-
                                     }}
                             >reappeared</button>
                         </div>
-
-
-
                     </InfoWindow>
                 ) : null}
-                //------------------------------------------------yellow
-                {  yellowMarkers.map((markerYellow)=>(
+                { /*------------------------------------------------yellow*/}
+                {   markerList.map((list)=>((list.id===2))&&
+                    yellowMarkerVar.map((markerYellow)=>(// eslint-disable-next-line
                     markerYellowID++,
-
-
                         <Marker
                             key={markerYellowID}
                             icon = {{
@@ -719,34 +562,21 @@ function MyComponent() {
                                 console.log(markerYellowID)
                                 console.log(markerYellow.lat);
                             }}
-
-
                         />
-
-
-                ))}
-
+                )))}
                 {yellowSelected ? (
-
                     <InfoWindow
-
                         position={{ lat: yellowSelected.lat+0.0003, lng: yellowSelected.lng }}
-
                         onCloseClick={() => {
                             setYellowSelected(null);
-
                         }}
                     >
                         <div>
                             <h2>   Possible   <br/>  Ambrosia!  </h2>
-
-
                             <button className={"removeYellow-marker"}
                                     onClick={()=>{
                                         console.log("deleted");
                                         deleteMarkers(convToTen(parseFloat(yellowSelected.lat)),convToTen(parseFloat(yellowSelected.lng)),yellowDeleteUrl,"yellow");
-
-
                                         setYellowSelected(null);
 
                                     }}
@@ -754,42 +584,33 @@ function MyComponent() {
                                 Remove</button>
                             <button className={"forSure-marker"}
                                     onClick={()=>{
-                                        console.log("transformat in gri");
-                                        setRedMarkers((current)=> [
-                                            ... current,
+                                        console.log("transformat in rosu");
+                                        const setMarkers=
                                             {
-
                                                 lat : yellowSelected.lat,
                                                 lng : yellowSelected.lng,
                                                 id : markerRedID,
-
-                                            },
-                                        ]);
-
-
+                                            }
+                                        let isInList=false;
+                                        redMarkerVar.forEach(marker =>{
+                                            if((marker.lng === setMarkers.lng) &&(marker.lat === setMarkers.lat) ){
+                                                isInList=true;
+                                                return;
+                                            }
+                                        })
+                                        if(!isInList){
+                                            redMarkerVar.push(setMarkers);
+                                        }
+                                        setRedMarkers(redMarkerVar)
                                         postToServer(yellowSelected.lat,yellowSelected.lng,redPostUrl);
-
                                         deleteMarkers(convToTen(parseFloat(yellowSelected.lat)), convToTen(parseFloat(yellowSelected.lng)), yellowDeleteUrl, "yellow");
-
-
                                         setYellowSelected(null);
-
-
                                     }}
                             >For sure!</button>
                         </div>
-
-
-
                     </InfoWindow>
                 ) : null}
                 }
-
-
-
-
-
-
             </GoogleMap>
         </div>
 

@@ -170,3 +170,15 @@
     display: block;
     margin-bottom: 5px;
 }
+.checkbox1{
+    height:auto;
+    width: 160px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #2b313d;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
