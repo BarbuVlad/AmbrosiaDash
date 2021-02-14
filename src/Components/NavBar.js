@@ -18,7 +18,7 @@ import Redirect from "react-router-dom/es/Redirect";
 import { createMuiTheme, withStyles, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 
 
-// Each logical "route" has two components, one for
+// Each logical "route" has two Ambrosia, one for
 // the sidebar and one for the main area. We want to
 // render both of them in different places when the
 // path matches the current URL.
@@ -30,18 +30,19 @@ import { createMuiTheme, withStyles, makeStyles, ThemeProvider } from '@material
 const routes = [
 
     {
-        path: "/Components/Maps",
+        path: "/Ambrosia/Maps",
         sidebar: () => <div> </div>,
         main: () => <GMaps/>,
         exact:true
+
     },
     {
-        path: "/Components/Volunteers",
+        path: "/Ambrosia/Volunteers",
         sidebar: () => <div> </div>,
         main: () => <Volunteers/>
     },
     {
-        path: "/Components/Login",
+        path: "/Ambrosia/Login",
         sidebar: () => <div> </div>,
         main: () => <Login/>
     }
@@ -94,22 +95,26 @@ const classes = useStyles();
                         <li>
                             <div className={'b'}>
                                 <img className={"maps-icon"} src={mapsIcon} alt ={"mapsIcon"}/>
-                                <Link to="/Components/Maps"> Maps</Link>
+                                <Link to="/Ambrosia/Maps"> Maps</Link>
+
                             </div>
+
                         </li>
                         <li>
                             <div className={'b'}>
                                 <img className={"vol-icon"} src={volIcon} alt ={"volIcon"}/>
-                                <Link to="/Components/Volunteers"> Volunteers</Link>
+                                <Link to="/Ambrosia/Volunteers"> Volunteers</Link>
                             </div>
 
                         </li>
                     </ul>
 
-                    <DropDownMenu/>
-                    <div className={'b'}>
-                    <CheckboxMarker/>
-                    </div>
+
+
+                        <DropDownMenu/>
+                        <CheckboxMarker/>
+
+
                     <div className={'signOutBorder'}>
                         <ThemeProvider theme={theme}>
                         <ColorButton   variant={'outlined'} className={classes.margin} onClick={ () =>
@@ -123,7 +128,7 @@ const classes = useStyles();
                         </ThemeProvider>
                     </div>
                     <Switch>
-                        <Redirect from="/" to="/Components/Maps"/>
+                        <Redirect from="/" to="/Ambrosia/Maps"/>
                         {routes.map((route, index) => (
                             // You can render a <Route> in as many places
                             // as you want in your app. It will render along
@@ -146,7 +151,7 @@ const classes = useStyles();
                     <Switch>
                         {routes.map((route, index) => (
                             // Render more <Route>s with the same paths as
-                            // above, but different components this time.
+                            // above, but different Ambrosia this time.
                             <Route
                                 key={index}
                                 path={route.path}
