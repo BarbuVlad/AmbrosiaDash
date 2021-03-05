@@ -174,12 +174,21 @@
     height:auto;
     width: 152px;
     position: fixed;
-    z-index: 1;
-    /*top: 0;
-    right: 0;*/
-    background-color: #2b313d;
+    /* z-index: 1;
+     top: 0;
+     right: 0;*/
+    /*background-color: #2b313d;
     box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    border-radius: 10px;*/
     padding: 7px 4px;
+    padding-top: 57px;
+}
+.dropDown1{
+    padding: 7px 4px;
+    width: 152px;
+    position: fixed;
+
+
+
 }
 

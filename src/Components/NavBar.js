@@ -107,12 +107,19 @@ const classes = useStyles();
                             </div>
 
                         </li>
+                        <li><CheckboxMarker/></li>
+
+                        <li>  <DropDownMenu/></li>
+
+
+
+
+
                     </ul>
 
 
 
-                        <DropDownMenu/>
-                        <CheckboxMarker/>
+
 
 
                     <div className={'signOutBorder'}>
