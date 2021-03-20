@@ -6,7 +6,7 @@ import {
     Link
 } from "react-router-dom";
 import "./NavBar.css"
-import Volunteers from "./Volunteers";
+import Volunteers from "./Volunteers/Volunteers";
 import GMaps from "./GMaps"
 import mapsIcon from "../Icons/maps-icon.png"
 import volIcon from "../Icons/vol-icon.png"

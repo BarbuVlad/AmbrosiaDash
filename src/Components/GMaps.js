@@ -242,7 +242,7 @@ function MyComponent() {
 
 
 
-    let alwaysGetMarkers = () => {
+    let alwaysGetMarkers =  () => {
     let heatmapbool = false;
         markerList.forEach(list=>{
             if(list.id===0)
@@ -371,7 +371,7 @@ function MyComponent() {
 
         alwaysGetMarkers();
 
-// eslint-disable-next-line
+
     },[]);
 
 //adaugare markere/zone pe harta la click------------------------------------------------------
