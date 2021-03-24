@@ -1,5 +1,3 @@
-import  { useEffect} from "react";
-
 import axios from 'axios'
 const volunteersUrl = 'http://92.87.91.16/backend_code/api/volunteer/read.php';
 const newVolunteersUrl = 'http://92.87.91.16/backend_code/api/new_volunteer/read.php';
@@ -12,10 +10,6 @@ export let VolData=[];
 
      axios.get(url)
         .then(response => {
-
-           // console.log("Asa arata datele:", response.data.data);
-
-
 
             for (let x = 0; x < response.data.data.length; x++) {
                 index++;
@@ -32,7 +26,7 @@ export let VolData=[];
                 // console.log(volData)
                 let isInList = false;
                 VolData.forEach(vol => {
-                    if (vol.uid === volData.id) {
+                    if (vol.email === volData.email) {
                         isInList = true;
                         return;
                     }
@@ -49,16 +43,8 @@ export let VolData=[];
 
 
 export default function GetAllVolunteers(){
-    useEffect(  () => {
 
-             getVolunteers(volunteersUrl, 'Volunteer', VolData);
-             getVolunteers(newVolunteersUrl, 'New Volunteer', VolData);
-
-
-
-
-
-    },[]);
-
+     getVolunteers(volunteersUrl, 'Volunteer', VolData);
+     getVolunteers(newVolunteersUrl, 'New Volunteer', VolData);
 
 }

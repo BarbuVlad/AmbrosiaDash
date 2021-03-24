@@ -3,43 +3,96 @@ import MUIDataTable from "mui-datatables";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import './Volunteers.css'
 import GetAllVolunteers, {VolData}  from "./GetAllVolunteers";
-import axios from "axios";
+import BanVolunteer from "./BanVolunteer";
+import BanNewVolunteer from "./BanNewVolunteer";
+import UpgradeVolunteer from "./UpgradeVolunteer";
+
+let Data = [];
+GetAllVolunteers();
+let volunteer;
 
 
+
+//obtin index pentru randul la care vreau sa modific tipul voluntarului
 
 function Volunteers () {
-    let Data = [];
-    GetAllVolunteers();
+    //Copiez datele din db in variabila locala
     Data = VolData.map(vol => ([vol.uid, vol.first_name, vol.last_name, vol.address, vol.phone, vol.email, vol.type]))
 
-    console.log("Data");
-    console.log(Data);
-    const columns = ["UID", "First Name", "Last Name", "Address", "Phone", "Email", "Type"];
-    const options = {
-        filterType: "dropdown",
-        responsive: "scroll",
+    const handleDeleteRow =(rowsDeleted) => {
+       rowsDeleted.data.forEach(d => {
+           if(Data[d.dataIndex][6]==='Volunteer')
+               BanVolunteer(Data[d.dataIndex][5])
+           else
+               BanNewVolunteer(Data[d.dataIndex][5])
+           }
+       ); // array of all ids to to be deleted}
+
+    }
+
+    const handleRowClick = (rowData, rowMeta) => {
+
+        volunteer = rowMeta.rowData;
+        if(volunteer[6]==='New Volunteer')
+        return (
+            <button className={'button'}
+                onClick={() => {
+                    volunteer = rowMeta.rowData;
+                    UpgradeVolunteer(volunteer);
+                    }
+                }
+            >
+                Upgrade to VOLUNTEER
+            </button>
+        );
+
     }
 
 
 
 
 
-        return (
 
-            <MuiThemeProvider theme={myTheme}>
+    const columns = ["UID", "First Name", "Last Name", "Address", "Phone", "Email", "Type", {
+                                                                                                name: "Action",
+                                                                                                options: {
+                                                                                                    filter: true,
+                                                                                                    sort: false,
+                                                                                                    empty: true,
+                                                                                                    customBodyRender: handleRowClick
+                                                                                                }
+                                                                                             }
+    ];
 
-            <MUIDataTable
-            className ={'table'}
-                title={"List of Volunteers"}
-                data ={Data}
-                columns={columns}
-                options={options}
+    const options = {
+        filterType: "dropdown",
+        responsive: "scroll",
+        onRowsDelete: handleDeleteRow ,
+
+
+    }
 
 
 
-            />
-            </MuiThemeProvider>
-        );
+
+    return (
+
+        <MuiThemeProvider theme={myTheme}>
+
+        <MUIDataTable
+        className ={'table'}
+            title={"List of Volunteers"}
+            data ={Data}
+            columns={columns}
+            options={options}
+
+
+
+
+
+        />
+        </MuiThemeProvider>
+    );
 
 
 
@@ -58,5 +111,5 @@ const myTheme = createMuiTheme({
     }
 
 });
-export  default Volunteers
+export default Volunteers
 

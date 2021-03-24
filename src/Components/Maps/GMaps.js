@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { GoogleMap,Marker,InfoWindow,HeatmapLayer} from '@react-google-maps/api';
-import Locate from "./Locate"
+import Locate from "../Locate"
 import "@reach/combobox/styles.css";
 import "./GMaps.css"
-import axios from 'axios'
 import { Circle } from '@react-google-maps/api';
-import Select from "react-select";
-import { Multiselect} from "multiselect-react-dropdown";
 //import Search from './Search'
 
-
+import deleteMarkers from './DeleteMarkers'
+import getFromUrad from "./GetFromUrad";
+import getMarkersFromServer from "./GetMarkers";
+import postToServer from './PostMarkers';
+import {opt} from './DropDownMenu'
+import {markerList} from "./CheckBoxMarkers";
 
 let redPostUrl = 'http://92.87.91.16/backend_code/api/red_marker/create.php';
 let redGetUrl = "http://92.87.91.16/backend_code/api/red_marker/read.php";
@@ -27,26 +29,7 @@ let yellowGetUrl='http://92.87.91.16/backend_code/api/yellow_marker/read.php';
 let yellowDeleteUrl='http://92.87.91.16/backend_code/api/yellow_marker/delete.php';
 
 let uradMonitorGetUrl = 'http://data.uradmonitor.com/api/v1/devices'
-let opt = -1 // variabila pentru optiunile de adaugare markere/zone
-let markerList=[]; // lista cu tipurile de markerele active, care trebuie sa fie afisate pe ecran
 
-//optinile de adaugare zone/markere rosii---------------------------------------------------------------------------
-const options = [
-    { value: -1, label: 'None' },
-    { value: 0, label: 'Place Markers' },
-    { value: 1, label: 'Place Zones' },
-    //{ value: 2, label: 'Edit Zones' },
-];
-
-//optiunile pentru triajul markerelor----------------------------------------------------------------------------------
-const markerOption=[
-    {id: 0,name :'Red'},
-    {id: 1, name :'Blue'},
-    {id: 2, name :'Yellow'},
-    {id: 3, name :'Grey'},
-    {id: 4, name :'Zone'},
-    {id: 5, name:'Heatmap'}
-]
 
 // variabile pentru fiecare tip de marker----------------------------------------------------------------------------
 const redMarkerVar=[];
@@ -56,81 +39,12 @@ const greyMarkerVar=[];
 const zoneVar=[];
 let uradMonitorVar=[];
 let heatmapData=[];
-
-
-
+//center - coordonatele la care se deschide harta
 const center = {
     lat: 45.760696,
     lng: 21.226788
 };
 
-
-//postare pe server a markerelor (in caz de cors policy dezactivare/activare proxy)---------------------------------
-function postToServer(lat,lng,url,radius) {
-
-    const proxyurl =""// "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
-
-    axios.post(proxyurl+url,
-        {
-            "longitude":lng,
-            "latitude":lat,
-            "radius":radius,
-        }
-    ).then(console.log("LATLONG"))
-}
-
-
-//meniu pentru a adauga markere rosii sau zone pe harta -------------------------------------------------------------
-export function DropDownMenu() {
-
-    const[selectedOption,setSelectedOption] = useState(-1)
-    const handleChange = selectedOption => {
-        setSelectedOption(selectedOption)
-        opt = selectedOption
-        console.log(`Option selected:`, selectedOption);
-        console.log("OPT: "+ opt.value)
-    };
-
-    return (
-        <div className={'dropDown1'}>
-        <Select
-            value={selectedOption}
-            onChange={handleChange}
-            options={options}
-            placeholder={"Options"}
-
-        />
-        </div>
-    );
-
-}
-
-
-//triaj markere ------------------------------------------------------------------------------------------------------
-export function CheckboxMarker() {
-    // eslint-disable-next-line
-    const [selectedMarkers,setSelectedMakers] = useState(markerOption);
-
-    const onSelect=(selectedMarkers)=>{
-        markerList=selectedMarkers;
-        console.log(markerList);
-    }
-    const onRemove=(selectedMarkers)=>{
-        markerList=selectedMarkers;
-    }
-    return(
-        <div className={'checkbox1'}>
-           <Multiselect
-               options={selectedMarkers}
-               displayValue="name"
-               placeholder={"Select the markers"}
-               onSelect={onSelect}
-               onRemove={onRemove}
-
-               />
-        </div>
-    )
-}
 
 function MyComponent() {
 
@@ -139,38 +53,6 @@ function MyComponent() {
     {
         return num.toFixed(10)
     }
-
-
-//stergere markere atat de pe harta cat si din db ---------------------------------------------------------------------
-    function deleteMarkers(lat,lng,url,marker) {
-
-            for(let i = 0; i < marker.length;i++)
-            {
-                if(convToTen(parseFloat(marker[i].lat)) === lat && convToTen(parseFloat(marker[i].lng))=== lng)
-                {
-                    marker.splice(i,1);
-                }
-            }
-    //stergere markers din DB
-
-        let data ={
-            "latitude": lat.toString(),
-            "longitude": lng.toString()
-        }
-        axios.delete(url,
-            {
-                data
-            }
-
-        ).then(
-            data => console.log(data, " a fost sters")
-
-        )
-        console.log(lat,lng)
-
-
-    }
-
     const [redSelected, setRedSelected] = useState(null);
     const [blueSelected, setBlueSelected] = useState(null);
     const [greySelected, setGreySelected] = useState(null);
@@ -197,181 +79,51 @@ function MyComponent() {
 
 //apeleaza tragerea markerelor din db la 1 secunda, in functie de -------------------------
 // markerele selectate pentru afisiere
-    function getFromUrad(url,markersVar)
-    {
-        axios.get(url,{
-            headers: {
-                'X-User-id':'6991',
-                'X-User-hash':'49b776d3689ddddb5535e3920a17083b'
-                }
-        })
-            .then(
-                res => {
-                     console.log(res.data);
-                    for (let i = 0; i < res.data.length; i++) {
 
-                        const setMarkers=
-                            {
-                                lng: parseFloat(res.data[i].longitude),
-                                lat: parseFloat(res.data[i].latitude),
-                                id: res.data[i].id,
-
-
-                            }
-
-                        let isInList=false;
-                        markersVar.forEach(marker =>{
-                            if((marker.lng === setMarkers.lng) &&(marker.lat === setMarkers.lat) ){
-                                isInList=true;
-                                return;
-                            }
-                        })
-                        if(!isInList){
-                            markersVar.push(setMarkers);
-                        }
-                    }
-                    console.log(markersVar);
-
-                }
-            );
-
-
-
-
-    }
 
 
 
     let alwaysGetMarkers =  () => {
     let heatmapbool = false;
         markerList.forEach(list=>{
-            if(list.id===0)
-            {
-                getMarkersFromServer(redGetUrl, markerRedID, redMarkerVar);
-
-            }
-            if(list.id===1)
-            {
-                getMarkersFromServer(blueGetUrl, markerBlueID, blueMarkerVar);
-            }
-            if(list.id===2)
-            {
-                getMarkersFromServer(yellowGetUrl, markerYellowID, yellowMarkerVar);
-
-            }
-            if(list.id===3)
-            {
-                getMarkersFromServer(greyGetUrl, markerGreyID, greyMarkerVar);
-            }
-            if(list.id===4)
-            {
-                getMarkersFromServer(redGetUrl, zoneID, zoneVar);
-                console.log(typeof list.id)
-            }
-            if(list.id===5)
-            {
-                //date uradmonitor
+            if(list.id===0) getMarkersFromServer(redGetUrl, markerRedID, redMarkerVar);
+            if(list.id===1) getMarkersFromServer(blueGetUrl, markerBlueID, blueMarkerVar);
+            if(list.id===2) getMarkersFromServer(yellowGetUrl, markerYellowID, yellowMarkerVar);
+            if(list.id===3) getMarkersFromServer(greyGetUrl, markerGreyID, greyMarkerVar);
+            if(list.id===4) getMarkersFromServer(redGetUrl, zoneID, zoneVar);
+            if(list.id===5) {//date uradmonitor
                 getFromUrad(uradMonitorGetUrl,uradMonitorVar)
-                heatmapData=uradMonitorVar.map((marker) => (new window.google.maps.LatLng(parseFloat(marker.lat), parseFloat(marker.lng))))
+                heatmapData=uradMonitorVar.map((marker) =>
+                    (new window.google.maps.LatLng(parseFloat(marker.lat), parseFloat(marker.lng))))
                 heatmapbool=true;
             }
-
-            if(list.id!==5&&heatmapbool===false)
-            {
+            if(list.id!==5&&heatmapbool===false){
                 heatmapData=[];
                 setReRender(markerList.length+Math.random());
             }
-
-
-
         })
-
         setReRender(markerList.length+Math.random());
         setTimeout(alwaysGetMarkers, 1000)
     }
 
-
 //tragere markere de pe server in variabile locale------------------------------------------
-   function getMarkersFromServer(url,markerID,markersVar)
-    {
-        axios.get(url)
-            .then(
-                res => {
-                   // console.log(res.data.data);
-                    for (let i = 0; i < res.data.data.length; i++) {
-                        markerID = i;
-                        const setMarkers=
-                            {
-                                lng: parseFloat(res.data.data[i].longitude),
-                                lat: parseFloat(res.data.data[i].latitude),
-                                id: i,
-                                radius: parseFloat(res.data.data[i].radius)
-
-                            }
-
-                        let isInList=false;
-                        markersVar.forEach(marker =>{
-                            if((marker.lng === setMarkers.lng) &&(marker.lat === setMarkers.lat) ){
-                                isInList=true;
-                                return;
-                            }
-                        })
-                        if(!isInList){
-                            markersVar.push(setMarkers);
-                        }
-                    }
-                    console.log(markersVar);
-
-                }
-            );
-
-        
-
-
-    }
-
 
     useEffect(() => {
 
         markerList.forEach(list=>{
-            if(list.id===0)
-            {
-                getMarkersFromServer(redGetUrl, markerRedID, redMarkerVar);
-            }
-            if(list.id===1)
-            {
-                getMarkersFromServer(blueGetUrl, markerBlueID, blueMarkerVar);
-            }
-            if(list.id===2)
-            {
-                getMarkersFromServer(yellowGetUrl, markerYellowID, yellowMarkerVar);
-            }
-            if(list.id===3)
-            {
-
-                getMarkersFromServer(greyGetUrl, markerGreyID, greyMarkerVar);
-            }
-            if(list.id===4)
-            {
-                getMarkersFromServer(redGetUrl, zoneID, zoneVar);
-            }
-            if(list.id===5)
-            {
-                //date uradmonitor
+            if(list.id===0) getMarkersFromServer(redGetUrl, markerRedID, redMarkerVar);
+            if(list.id===1) getMarkersFromServer(blueGetUrl, markerBlueID, blueMarkerVar);
+            if(list.id===2) getMarkersFromServer(yellowGetUrl, markerYellowID, yellowMarkerVar);
+            if(list.id===3) getMarkersFromServer(greyGetUrl, markerGreyID, greyMarkerVar);
+            if(list.id===4) getMarkersFromServer(redGetUrl, zoneID, zoneVar);
+            if(list.id===5){
                 getFromUrad(uradMonitorGetUrl,uradMonitorVar)
                 heatmapData=uradMonitorVar.map((marker) => (new window.google.maps.LatLng(parseFloat(marker.lat), parseFloat(marker.lng))))
-
-            }
-
-
-
-
-
+            };
         })
-
         alwaysGetMarkers();
 
-
+// eslint-disable-next-line
     },[]);
 
 //adaugare markere/zone pe harta la click------------------------------------------------------
@@ -385,7 +137,6 @@ function MyComponent() {
                 radius:50,
             }
             let isInList=false;
-
             redMarkerVar.forEach(marker =>{
                 if((marker.lng === setMarkers.lng) &&(marker.lat === setMarkers.lat) ){
                     isInList=true;
@@ -395,9 +146,8 @@ function MyComponent() {
             if(!isInList){
                 redMarkerVar.push(setMarkers);
             }
-            
-//apelare addserver
-            postToServer(e.latLng.lat(), e.latLng.lng(), redPostUrl,50)
+        //apelare addserver
+        postToServer(e.latLng.lat(), e.latLng.lng(), redPostUrl,50)
         }
         if( opt.value === 1){
             markerRedID++;
@@ -411,8 +161,6 @@ function MyComponent() {
             zoneVar.push(setMarkers)
 //apelare addserver
             postToServer(e.latLng.lat(), e.latLng.lng(), redPostUrl,5000)
-
-
         }
     }, [markerRedID]);
 
@@ -430,10 +178,6 @@ function MyComponent() {
 
     return (
         <div>
-
-
-
-
                     <GoogleMap
                         id="map"
                         mapContainerStyle={containerStyle}
@@ -441,21 +185,12 @@ function MyComponent() {
                         zoom={10}
                         onClick={onMapClick}
                         onLoad={onMapLoad}
-
-
                     >
-
-
-
                         <HeatmapLayer
 
                         data={[...heatmapData]}
 
-
                         />
-
-
-
                         <Locate panTo={panTo}/>
                         {
                             markerList.map((list) => ((list.id === 4) &&
@@ -530,10 +265,7 @@ function MyComponent() {
                         {/*---------------------------------------------------------------RED MARKER*/}
                         {markerList.map((list) => ((list.id === 0) &&
                             redMarkerVar.map((marker) => (markerRedID++,
-
                                 (marker.radius <= 50) &&
-
-
                                 <Marker
 
                                     key={markerRedID}
@@ -550,8 +282,8 @@ function MyComponent() {
                                 />
 
 
-                            ))))
-                        }
+                            ))))}
+
                         {redSelected ? (
 
                             <InfoWindow
@@ -600,7 +332,6 @@ function MyComponent() {
                                 </div>
                             </InfoWindow>
                         ) : null}
-
                         {/*-------------------------------------------------------------------------------------------BLUE MARKER*/}
                         {markerList.map((list) => ((list.id === 1) &&
                             blueMarkerVar.map((markerBlue) => (

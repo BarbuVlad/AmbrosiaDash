@@ -7,24 +7,28 @@ const options = [
     { value: 0, label: 'Place Markers' },
     { value: 1, label: 'Place Zone' },
 ];
+export let opt =-1;
+export default function DropDownMenu() {
 
-let  DropDownMenu =()=> {
-
-  const[selectedOption,setSelectedOption] = useState(-1)
+    const[selectedOption,setSelectedOption] = useState(-1)
     const handleChange = selectedOption => {
-      setSelectedOption(selectedOption)
+        setSelectedOption(selectedOption)
+        opt = selectedOption
         console.log(`Option selected:`, selectedOption);
+        console.log("OPT: "+ opt.value)
     };
 
-        return (
+    return (
+        <div className={'dropDown1'}>
             <Select
                 value={selectedOption}
                 onChange={handleChange}
                 options={options}
                 placeholder={"Options"}
+
             />
-        );
+        </div>
+    );
 
 }
 
-export default DropDownMenu

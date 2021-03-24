@@ -7,12 +7,13 @@ import {
 } from "react-router-dom";
 import "./NavBar.css"
 import Volunteers from "./Volunteers/Volunteers";
-import GMaps from "./GMaps"
+import GMaps from "./Maps/GMaps"
 import mapsIcon from "../Icons/maps-icon.png"
 import volIcon from "../Icons/vol-icon.png"
 import logoAmb from "../Logo/AmbrosiaLogo.png"
 import Login from "./Login"
-import {DropDownMenu,CheckboxMarker}  from "./GMaps"
+import CheckboxMarker from "./Maps/CheckBoxMarkers"
+import DropDownMenu from './Maps/DropDownMenu';
 import Button from '@material-ui/core/Button';
 import Redirect from "react-router-dom/es/Redirect";
 import { createMuiTheme, withStyles, makeStyles, ThemeProvider } from '@material-ui/core/styles';
@@ -47,6 +48,7 @@ const routes = [
         main: () => <Login/>
     }
 ];
+
 let handleLogOut = () => {
     localStorage.setItem('logged', 'unregistered')
     const logged = localStorage.getItem('logged')
@@ -79,6 +81,7 @@ const theme = createMuiTheme({
 
 let NavBar =()=> {
 const classes = useStyles();
+
     return (
 
         <Router>
@@ -109,7 +112,8 @@ const classes = useStyles();
                         </li>
                         <li><CheckboxMarker/></li>
 
-                        <li>  <DropDownMenu/></li>
+                        {/* eslint-disable-next-line react/jsx-no-undef */}
+                        <li><DropDownMenu/></li>
 
 
 
