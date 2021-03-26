@@ -15,8 +15,8 @@ import NavBar from "./Components/NavBar";
       )}
       else
   return (
-   //<Login/>
-<NavBar/>
+  <Login/>
+//<NavBar/>
 
   );
 };

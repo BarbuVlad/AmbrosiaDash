@@ -4,7 +4,7 @@ import "./Login.css";
 import logo from '../BackgroundImage/AmbrosiaAlertLogo.png'
 import NavBar from './NavBar'
 
-import axios from 'axios'
+//import axios from 'axios'
 
 
 
@@ -22,8 +22,8 @@ export default function Login() {
     }
 
 
-    let checkAcc = () => {
-        const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
+   let checkAcc = () => {
+       /* const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
         axios.post(proxyurl+'http://92.87.91.16/backend_code/api/admins/login.php',
 
 
@@ -36,8 +36,11 @@ export default function Login() {
             }
         ).then(res =>{
             setServerAnswer(res.data.message)
-        console.log(serverAnswer)})
-
+        console.log(serverAnswer)})*/
+           if(email === 'admin123@gmail.com' &&
+            password ==='123'){
+                setServerAnswer("login successfull");
+        }
 
     }
 
