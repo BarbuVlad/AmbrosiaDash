@@ -45,8 +45,6 @@ export default function Login() {
     }
 
 
-
-
     if(serverAnswer ==="login successfull")
     {
         localStorage.setItem('logged', serverAnswer )
@@ -58,9 +56,6 @@ export default function Login() {
         return (
             <div className={"PageFrame"}>
                 <div className="Login">
-
-
-
 
                     <form className={'Form'} onSubmit={handleSubmit}>
                         <img className={"LogoImage"} src = {logo} alt={'Logo'}/>

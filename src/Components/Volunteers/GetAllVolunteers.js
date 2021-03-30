@@ -1,14 +1,24 @@
 import axios from 'axios'
+import {decode as base64_decode, encode as base64_encode} from 'base-64';
 const volunteersUrl = 'http://92.87.91.16/backend_code/api/volunteer/read.php';
 const newVolunteersUrl = 'http://92.87.91.16/backend_code/api/new_volunteer/read.php';
 let index = -1;
 
 export let VolData=[];
-
+const username = 'AA_user'
+const password = 'ambrosiaAlertPass321'
+const authHeader = 'Basic ' + base64_encode(`${username}:${password}`);
+const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
 
  function getVolunteers(url,type) {
 
-     axios.get(url)
+     axios.get(proxyurl+url,
+         {
+
+
+
+             })
         .then(response => {
 
             for (let x = 0; x < response.data.data.length; x++) {
@@ -39,6 +49,9 @@ export let VolData=[];
 
 
         })
+         .catch(err=>{
+             console.log(err)
+         })
 }
 
 

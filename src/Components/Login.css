@@ -6,21 +6,23 @@
         margin: 100px;
         background-color: red;
 
+
     }
     .Login {
         padding: 60px 0;
-        background-color:#f7f7f7;
+        background-color:white;
 
 
     }
 
     .Login form {
+
         margin: 0 auto;
         max-width: 320px;
-        background-color:#f7f7f7;
+        background-color:white;
         position: absolute;
-        right: 300px;
-        bottom: 240px;
+        right: 15%;
+        bottom: 40%;
 
 
 
@@ -43,10 +45,10 @@
     {
         display: block;
         position: relative;
-       width: 300px;
+        width: 550px;
         height: 300px;
         top: 310px;
-       right: 460px;
+        right: 520px;
     }
 
 
@@ -55,7 +57,7 @@
     {
 
         border-radius: 100px;
-        background-color:	#e6e6e6;
+        background-color:white;
         border: none;
         width: 230px;
         height: 37px;
@@ -81,14 +83,14 @@
         height: 37px;
         border-radius: 100px;
         background-color:#23c7ac;
-        color:#f7f7f7;
+        color:white;
         font-size: 20px;
 
     }
 
     body
     {
-        background-color: #f7f7f7;
+        background-color: white;
         text-align: center;
     }
 

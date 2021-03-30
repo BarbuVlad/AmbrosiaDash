@@ -21,10 +21,10 @@ function Volunteers () {
 
     const handleDeleteRow =(rowsDeleted) => {
        rowsDeleted.data.forEach(d => {
-           if(Data[d.dataIndex][6]==='Volunteer')
-               BanVolunteer(Data[d.dataIndex][5])
-           else
-               BanNewVolunteer(Data[d.dataIndex][5])
+          // if(Data[d.dataIndex][6]==='Volunteer')
+               UpgradeVolunteer(Data[d.dataIndex],'delete')
+           //else
+              // BanNewVolunteer(Data[d.dataIndex][5])
            }
        ); // array of all ids to to be deleted}
 
@@ -38,7 +38,8 @@ function Volunteers () {
             <button className={'button'}
                 onClick={() => {
                     volunteer = rowMeta.rowData;
-                    UpgradeVolunteer(volunteer);
+                    console.log(volunteer[5])
+                    UpgradeVolunteer(volunteer,'confirm');
                     }
                 }
             >
@@ -53,7 +54,7 @@ function Volunteers () {
 
 
 
-    const columns = ["UID", "First Name", "Last Name", "Address", "Phone", "Email", "Type", {
+    const columns = ["UID", "First Name", "Last Name", "Address", "Phone", "Email", "Type" ,{
                                                                                                 name: "Action",
                                                                                                 options: {
                                                                                                     filter: true,

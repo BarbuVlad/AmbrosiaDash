@@ -10,7 +10,7 @@ import Volunteers from "./Volunteers/Volunteers";
 import GMaps from "./Maps/GMaps"
 import mapsIcon from "../Icons/maps-icon.png"
 import volIcon from "../Icons/vol-icon.png"
-import logoAmb from "../Logo/AmbrosiaLogo.png"
+import logoAmb from "../Logo/AmbLogo.png"
 import Login from "./Login"
 import CheckboxMarker from "./Maps/CheckBoxMarkers"
 import DropDownMenu from './Maps/DropDownMenu';

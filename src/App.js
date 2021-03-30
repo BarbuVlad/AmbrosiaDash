@@ -7,6 +7,7 @@ import NavBar from "./Components/NavBar";
 
 
   let App = () => {
+
     const logged = localStorage.getItem('logged')
     if(logged === "login successfull"){
       console.log(logged)
@@ -15,6 +16,7 @@ import NavBar from "./Components/NavBar";
       )}
       else
   return (
+
   <Login/>
 //<NavBar/>
 

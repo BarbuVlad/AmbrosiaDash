@@ -1,8 +1,21 @@
 import axios from "axios";
-
+const username = 'AA_user';
+const password = 'ambrosiaAlertPass321';
+const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
 export default function getMarkersFromServer(url,markerID,markersVar)
 {
-    axios.get(url)
+    axios.get(proxyurl+url,{
+        headers: {
+            'Access-Control-Allow-Origin':'*',
+            'Authorization': `Basic ${token}`
+        },
+        auth:{
+             username:username,
+            password:password
+        }
+
+    })
         .then(
             res => {
                 // console.log(res.data.data);
