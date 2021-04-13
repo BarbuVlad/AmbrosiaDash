@@ -54,7 +54,7 @@ function Volunteers () {
 
 
 
-    const columns = ["UID", "First Name", "Last Name", "Address", "Phone", "Email", "Type" ,{
+    const columns = ["UID", "First Name", "Last Name", "Address", "Phone", "Email", "Type" /*,{
                                                                                                 name: "Action",
                                                                                                 options: {
                                                                                                     filter: true,
@@ -62,7 +62,7 @@ function Volunteers () {
                                                                                                     empty: true,
                                                                                                     customBodyRender: handleRowClick
                                                                                                 }
-                                                                                             }
+                                                                                             }*/
     ];
 
     const options = {

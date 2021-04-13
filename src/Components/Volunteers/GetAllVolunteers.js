@@ -13,12 +13,7 @@ const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca s
 
  function getVolunteers(url,type) {
 
-     axios.get(proxyurl+url,
-         {
-
-
-
-             })
+     axios.get(url)
         .then(response => {
 
             for (let x = 0; x < response.data.data.length; x++) {
