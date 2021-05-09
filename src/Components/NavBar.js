@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    Redirect,
     BrowserRouter as Router,
     Switch,
     Route,
@@ -15,7 +16,7 @@ import Login from "./Login"
 import CheckboxMarker from "./Maps/CheckBoxMarkers"
 import DropDownMenu from './Maps/DropDownMenu';
 import Button from '@material-ui/core/Button';
-import Redirect from "react-router-dom/es/Redirect";
+
 import { createMuiTheme, withStyles, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 
 
@@ -28,26 +29,7 @@ import { createMuiTheme, withStyles, makeStyles, ThemeProvider } from '@material
 // spots: once for the sidebar and once in the main
 // content section. All routes are in the same
 // order they would appear in a <Switch>.
-const routes = [
 
-    {
-        path: "/Ambrosia/Maps",
-        sidebar: () => <div> </div>,
-        main: () => <GMaps/>,
-        exact:true
-
-    },
-    {
-        path: "/Ambrosia/Volunteers",
-        sidebar: () => <div> </div>,
-        main: () => <Volunteers/>
-    },
-    {
-        path: "/Ambrosia/Login",
-        sidebar: () => <div> </div>,
-        main: () => <Login/>
-    }
-];
 
 let handleLogOut = () => {
     localStorage.setItem('logged', 'unregistered')
@@ -56,6 +38,7 @@ let handleLogOut = () => {
 
 
 }
+
 const ColorButton = withStyles((theme) => ({
     root: {
         color: theme.palette.getContrastText("#2b313d"),
@@ -80,12 +63,20 @@ const theme = createMuiTheme({
 });
 
 let NavBar =()=> {
-const classes = useStyles();
+    const classes = useStyles();
 
     return (
 
         <Router>
+            <div style={{ flex: 1, padding: "10px" }}>
+                <Switch>
+                    <Route path="/"  exact component={GMaps}/>
+                    <Route path="/Maps"  component={GMaps}/>
+                    <Route path="/Volunteers" component={Volunteers}/>
+                    <Route path="/Login"  component={Login}/>
+                </Switch>
 
+            </div>
             <div className={"PanelPos"}>
                 <div className={"Panel"} >
                     <div className={"ambrosia-title"}>
@@ -98,7 +89,9 @@ const classes = useStyles();
                         <li>
                             <div className={'b'}>
                                 <img className={"maps-icon"} src={mapsIcon} alt ={"mapsIcon"}/>
-                                <Link to="/Ambrosia/Maps"> Maps</Link>
+                                <Link to="/Maps"> Maps</Link>
+
+
 
                             </div>
 
@@ -106,7 +99,7 @@ const classes = useStyles();
                         <li>
                             <div className={'b'}>
                                 <img className={"vol-icon"} src={volIcon} alt ={"volIcon"}/>
-                                <Link to="/Ambrosia/Volunteers"> Volunteers</Link>
+                                <Link to="/Volunteers"> Volunteers</Link>
                             </div>
 
                         </li>
@@ -128,50 +121,26 @@ const classes = useStyles();
 
                     <div className={'signOutBorder'}>
                         <ThemeProvider theme={theme}>
-                        <ColorButton   variant={'outlined'} className={classes.margin} onClick={ () =>
-                        {
-                            handleLogOut();
-                            window.location.reload(false);
-                        }
-                        }
-                        >Sign out
-                        </ColorButton>
+                            <ColorButton   variant={'outlined'} className={classes.margin} onClick={ () =>
+                            {
+
+                                handleLogOut();
+
+                            }
+                            }
+                            >
+                                <Link style= {{color: 'white'}} to="/Ambrosia/Login">
+                                    Log Out
+                                </Link>
+
+                            </ColorButton>
                         </ThemeProvider>
                     </div>
-                    <Switch>
-                        <Redirect from="/" to="/Ambrosia/Maps"/>
-                        {routes.map((route, index) => (
-                            // You can render a <Route> in as many places
-                            // as you want in your app. It will render along
-                            // with any other <Route>s that also match the URL.
-                            // So, a sidebar or breadcrumbs or anything else
-                            // that requires you to render multiple things
-                            // in multiple places at the same URL is nothing
-                            // more than multiple <Route>s.
-                            <Route
-                                key={index}
-                                path={route.path}
-                                exact={route.exact}
-                                children={<route.sidebar />}
-                            />
-                        ))}
-                    </Switch>
+
+
                 </div>
 
-                <div style={{ flex: 1, padding: "10px" }}>
-                    <Switch>
-                        {routes.map((route, index) => (
-                            // Render more <Route>s with the same paths as
-                            // above, but different Ambrosia this time.
-                            <Route
-                                key={index}
-                                path={route.path}
-                                exact={route.exact}
-                                children={<route.main />}
-                            />
-                        ))}
-                    </Switch>
-                </div>
+
 
             </div>
         </Router>

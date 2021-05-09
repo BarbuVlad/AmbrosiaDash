@@ -39,13 +39,13 @@ export default function Login() {
         console.log(serverAnswer)})
            if(email === 'admin123@gmail.com' &&
             password ==='123'){
-                setServerAnswer("login successfull");
+                setServerAnswer("login successful");
         }
 
     }
 
 
-    if(serverAnswer ==="login successfull")
+    if(serverAnswer ==="login successful")
     {
         localStorage.setItem('logged', serverAnswer )
         return(
