@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    withRouter,
     Redirect,
     BrowserRouter as Router,
     Switch,
@@ -30,11 +31,24 @@ import { createMuiTheme, withStyles, makeStyles, ThemeProvider } from '@material
 // content section. All routes are in the same
 // order they would appear in a <Switch>.
 
-
+let logged = 'login successful';
 let handleLogOut = () => {
     localStorage.setItem('logged', 'unregistered')
-    const logged = localStorage.getItem('logged')
-    console.log(logged)
+    logged = localStorage.getItem('logged')
+   // console.log(logged)
+    return(
+        <div>
+        <Router>
+            <Switch>
+                <Redirect from='/' to='/Login'/>
+                <Route path="/Login">
+                    <Login/>
+                </Route>
+            </Switch>
+
+        </Router>
+        </div>
+    )
 
 
 }
@@ -64,6 +78,7 @@ const theme = createMuiTheme({
 
 let NavBar =()=> {
     const classes = useStyles();
+    console.log(logged);
 
     return (
 
@@ -129,7 +144,8 @@ let NavBar =()=> {
                             }
                             }
                             >
-                                <Link style= {{color: 'white'}} to="/Ambrosia/Login">
+
+                                <Link style= {{color: 'white'}} to="/Login">
                                     Log Out
                                 </Link>
 
@@ -147,4 +163,4 @@ let NavBar =()=> {
     );
 }
 
-export default NavBar;
+export default withRouter(NavBar);

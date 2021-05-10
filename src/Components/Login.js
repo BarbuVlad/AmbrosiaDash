@@ -3,8 +3,16 @@ import {Button, FormGroup, FormControl} from "react-bootstrap";
 import "./Login.css";
 import logo from '../BackgroundImage/AmbrosiaAlertLogo.png'
 import NavBar from './NavBar'
-
+import {
+    Redirect,
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
 import axios from 'axios'
+import GMaps from "./Maps/GMaps";
+import {Place} from "@material-ui/icons";
 
 
 
@@ -45,11 +53,19 @@ export default function Login() {
     }
 
 
-    if(serverAnswer ==="login successful")
-    {
+    if(serverAnswer ==="login successful"){
         localStorage.setItem('logged', serverAnswer )
         return(
-            <NavBar/>
+            <Router>
+                <Switch>
+                    <Redirect from='/Login' to='/Maps'/>
+                    <Route path="/Maps">
+                        <GMaps/>
+                    </Route>
+                </Switch>
+
+            </Router>
+
         );
     }
 
