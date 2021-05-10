@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/AmbrosiaDash/precache-manifest.ba05414c49ba317f68d8354bc8031674.js"
+  "/AmbrosiaDash/precache-manifest.b03b13a45d8fbf3adea66bb13c353834.js"
 );
 
 self.addEventListener('message', (event) => {

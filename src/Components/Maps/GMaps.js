@@ -28,7 +28,7 @@ let greyDeleteUrl = 'https://ambrosiaalert.xyz/backend_code/api/grey_marker/dele
 let yellowGetUrl='https://ambrosiaalert.xyz/backend_code/api/yellow_marker/read.php';
 let yellowDeleteUrl='https://ambrosiaalert.xyz/backend_code/api/yellow_marker/delete.php';
 
-let uradMonitorGetUrl = 'http://data.uradmonitor.com/api/v1/devices'
+let uradMonitorGetUrl = 'https://data.uradmonitor.com/api/v1/devices'
 
 
 // variabile pentru fiecare tip de marker----------------------------------------------------------------------------
