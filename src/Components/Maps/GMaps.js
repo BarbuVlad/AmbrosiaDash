@@ -13,20 +13,20 @@ import postToServer from './PostMarkers';
 import {opt} from './DropDownMenu'
 import {markerList} from "./CheckBoxMarkers";
 
-let redPostUrl = 'http://92.87.91.16/backend_code/api/red_marker/create.php';
-let redGetUrl = "http://92.87.91.16/backend_code/api/red_marker/read.php";
-let redDeleteUrl = 'http://92.87.91.16/backend_code/api/red_marker/delete.php';
+let redPostUrl = 'https://ambrosiaalert.xyz/backend_code/api/red_marker/create.php';
+let redGetUrl = "https://ambrosiaalert.xyz/backend_code/api/red_marker/read.php";
+let redDeleteUrl = 'https://ambrosiaalert.xyz/backend_code/api/red_marker/delete.php';
 
-let blueGetUrl = 'http://92.87.91.16/backend_code/api/blue_marker/read.php';
-let blueDeleteUrl = 'http://92.87.91.16/backend_code/api/blue_marker/delete.php';
+let blueGetUrl = 'https://ambrosiaalert.xyz/backend_code/api/blue_marker/read.php';
+let blueDeleteUrl = 'https://ambrosiaalert.xyz/backend_code/api/blue_marker/delete.php';
 
-let greyPostUrl='http://92.87.91.16/backend_code/api/grey_marker/create.php';
-let greyGetUrl = 'http://92.87.91.16/backend_code/api/grey_marker/read.php';
-let greyDeleteUrl = 'http://92.87.91.16/backend_code/api/grey_marker/delete.php';
+let greyPostUrl='https://ambrosiaalert.xyz/backend_code/api/grey_marker/create.php';
+let greyGetUrl = 'https://ambrosiaalert.xyz/backend_code/api/grey_marker/read.php';
+let greyDeleteUrl = 'https://ambrosiaalert.xyz/backend_code/api/grey_marker/delete.php';
 
-//let yellowPostUrl='http://92.87.91.16/backend_code/api/yellow_marker/create.php';
-let yellowGetUrl='http://92.87.91.16/backend_code/api/yellow_marker/read.php';
-let yellowDeleteUrl='http://92.87.91.16/backend_code/api/yellow_marker/delete.php';
+//let yellowPostUrl='https://ambrosiaalert.xyz/backend_code/api/yellow_marker/create.php';
+let yellowGetUrl='https://ambrosiaalert.xyz/backend_code/api/yellow_marker/read.php';
+let yellowDeleteUrl='https://ambrosiaalert.xyz/backend_code/api/yellow_marker/delete.php';
 
 let uradMonitorGetUrl = 'http://data.uradmonitor.com/api/v1/devices'
 

@@ -1,5 +1,6 @@
 {
   "name": "dashboardaa",
+  "homepage": "https://ambrosiaalert.xyz/AmbrosiaDash",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

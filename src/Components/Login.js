@@ -32,7 +32,7 @@ export default function Login() {
 
    let checkAcc = () => {
         const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
-        axios.post(proxyurl+'http://92.87.91.16/backend_code/api/admins/login.php',
+        axios.post(proxyurl+'https://ambrosiaalert.xyz/backend_code/api/admins/login.php',
 
 
             {
@@ -56,15 +56,8 @@ export default function Login() {
     if(serverAnswer ==="login successful"){
         localStorage.setItem('logged', serverAnswer )
         return(
-            <Router>
-                <Switch>
-                    <Redirect from='/Login' to='/Maps'/>
-                    <Route path="/Maps">
-                        <GMaps/>
-                    </Route>
-                </Switch>
+            <NavBar/>
 
-            </Router>
 
         );
     }

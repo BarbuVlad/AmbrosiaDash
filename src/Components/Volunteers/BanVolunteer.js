@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 
-const deleteVolunteerURL = 'http://92.87.91.16/backend_code/api/volunteer/delete.php';
+const deleteVolunteerURL = 'https://ambrosiaalert.xyz/backend_code/api/volunteer/delete.php';
 
 export default function BanVolunteer(volunteerMail){
 

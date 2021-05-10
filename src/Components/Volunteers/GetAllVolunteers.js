@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
-const volunteersUrl = 'http://92.87.91.16/backend_code/api/volunteer/read.php';
-const newVolunteersUrl = 'http://92.87.91.16/backend_code/api/new_volunteer/read.php';
+const volunteersUrl = 'https://ambrosiaalert.xyz/backend_code/api/volunteer/read.php';
+const newVolunteersUrl = 'https://ambrosiaalert.xyz/backend_code/api/new_volunteer/read.php';
 let index = -1;
 
 export let VolData=[];
