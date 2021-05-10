@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "4eee3714a2fb1288ec7e3919062e6443",
+    "revision": "4276b10098f56fe906a6920b525b4a63",
     "url": "/AmbrosiaDash/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/AmbrosiaDash/static/css/2.68584d97.chunk.css"
   },
   {
-    "revision": "672260e580b23ddb2ddb",
+    "revision": "c1e5ddae4a5e27e5277d",
     "url": "/AmbrosiaDash/static/css/main.3d2af9a6.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/AmbrosiaDash/static/js/2.d1cae741.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "672260e580b23ddb2ddb",
-    "url": "/AmbrosiaDash/static/js/main.98e1fee2.chunk.js"
+    "revision": "c1e5ddae4a5e27e5277d",
+    "url": "/AmbrosiaDash/static/js/main.9e12407c.chunk.js"
   },
   {
     "revision": "97494a157b13c54dc138",

@@ -31,8 +31,8 @@ export default function Login() {
 
 
    let checkAcc = () => {
-        const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
-        axios.post(proxyurl+'https://ambrosiaalert.xyz/backend_code/api/admins/login.php',
+        //const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
+        axios.post('https://ambrosiaalert.xyz/backend_code/api/admins/login.php',
 
 
             {

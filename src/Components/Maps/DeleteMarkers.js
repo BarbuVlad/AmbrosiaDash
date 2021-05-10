@@ -18,8 +18,8 @@ export default function deleteMarkers(lat,lng,url,marker) {
         "latitude": lat.toString(),
         "longitude": lng.toString()
     }
-    const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
-    axios.delete(proxyurl+url,
+    //const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
+    axios.delete(url,
         {
             data
         }

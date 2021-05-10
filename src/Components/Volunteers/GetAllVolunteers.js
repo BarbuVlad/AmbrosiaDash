@@ -9,7 +9,7 @@ const username = 'AA_user'
 const password = 'ambrosiaAlertPass321'
 const authHeader = 'Basic ' + base64_encode(`${username}:${password}`);
 const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
-const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
+//const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
 
  function getVolunteers(url,type) {
 

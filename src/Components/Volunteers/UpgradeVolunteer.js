@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const url ='https://ambrosiaalert.xyz/backend_cod/api/new_volunteer/validate.php';
-const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
+//const proxyurl = "https://cors-anywhere.herokuapp.com/" //folosesc un proxi ca sa evit eroarea
 export default function UpgradeVolunteer(volunteer,type){
    axios.post(url,
        {
