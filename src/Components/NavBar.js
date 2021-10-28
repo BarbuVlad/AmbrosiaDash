@@ -1,20 +1,23 @@
-import React from "react";
+import React, {useState} from "react";
 import {
+    withRouter,
+    Redirect,
     BrowserRouter as Router,
     Switch,
     Route,
     Link
 } from "react-router-dom";
 import "./NavBar.css"
-import Volunteers from "./Volunteers";
-import GMaps from "./GMaps"
+import Volunteers from "./Volunteers/Volunteers";
+import GMaps from "./Maps/GMaps"
 import mapsIcon from "../Icons/maps-icon.png"
 import volIcon from "../Icons/vol-icon.png"
-import logoAmb from "../Logo/AmbrosiaLogo.png"
+import logoAmb from "../Logo/AmbLogo.png"
 import Login from "./Login"
-import {DropDownMenu,CheckboxMarker}  from "./GMaps"
+import CheckboxMarker from "./Maps/CheckBoxMarkers"
+import DropDownMenu from './Maps/DropDownMenu';
 import Button from '@material-ui/core/Button';
-import Redirect from "react-router-dom/es/Redirect";
+
 import { createMuiTheme, withStyles, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 
 
@@ -27,33 +30,10 @@ import { createMuiTheme, withStyles, makeStyles, ThemeProvider } from '@material
 // spots: once for the sidebar and once in the main
 // content section. All routes are in the same
 // order they would appear in a <Switch>.
-const routes = [
 
-    {
-        path: "/Ambrosia/Maps",
-        sidebar: () => <div> </div>,
-        main: () => <GMaps/>,
-        exact:true
-
-    },
-    {
-        path: "/Ambrosia/Volunteers",
-        sidebar: () => <div> </div>,
-        main: () => <Volunteers/>
-    },
-    {
-        path: "/Ambrosia/Login",
-        sidebar: () => <div> </div>,
-        main: () => <Login/>
-    }
-];
-let handleLogOut = () => {
-    localStorage.setItem('logged', 'unregistered')
-    const logged = localStorage.getItem('logged')
-    console.log(logged)
+let logged ;
 
 
-}
 const ColorButton = withStyles((theme) => ({
     root: {
         color: theme.palette.getContrastText("#2b313d"),
@@ -78,93 +58,124 @@ const theme = createMuiTheme({
 });
 
 let NavBar =()=> {
-const classes = useStyles();
-    return (
+    const classes = useStyles();
+    console.log(logged);
+    const [logout, setLogout] = useState(0); // check if the logout button was pressed
+    const [reload, setReload] = useState(0)
+    const [onMap,setOnMap] = useState(true)
+    let handleLogOut = () => {
+        localStorage.setItem('logged', 'unregistered')
+        logged = localStorage.getItem('logged')
+        setLogout(1); // if logout pressed set to 1, else remain 0
 
-        <Router>
 
-            <div className={"PanelPos"}>
-                <div className={"Panel"} >
-                    <div className={"ambrosia-title"}>
+    }
 
-                        <img className={"logo"} src={logoAmb} alt ={"logoAmb"}/>
-                        Ambrosia Alert
+    let handleOnMap=()=>{
+
+       setOnMap(true);
+       localStorage.setItem('onMaps', 'true')
+
+    }
+    let handleOnVolunteers=()=>{
+        setOnMap(false);
+        localStorage.setItem('onMaps', 'false')
+    }
+    let check = localStorage.getItem('onMaps');
+
+    if(logout===1)//if it was pressed will return only the login screen, else, returns the whole navbar.
+        return <Login/>
+    else{
+
+        return (
+
+                <Router>
+                    <div style={{ flex: 1, padding: "10px" }}>
+                        <Switch>
+                            <Route path="/"  exact component={GMaps}/>
+                            <Route path="/AmbrosiaDash" component={GMaps}/>
+                            <Route path="/Maps"  component={GMaps}/>
+                            <Route path="/Volunteers" component={Volunteers}/>
+                            <Route path="/Login"  component={GMaps}/>
+                        </Switch>
+
                     </div>
-                    <ul style={{ listStyleType: "none", padding: 0 }}>
+                    <div className={"PanelPos"}>
+                        <div className={"Panel"} >
+                            <div className={"ambrosia-title"}>
 
-                        <li>
-                            <div className={'b'}>
-                                <img className={"maps-icon"} src={mapsIcon} alt ={"mapsIcon"}/>
-                                <Link to="/Ambrosia/Maps"> Maps</Link>
+                                <img className={"logo"} src={logoAmb} alt ={"logoAmb"}/>
+                                Ambrosia Alert
+                            </div>
+                            <ul style={{ listStyleType: "none", padding: 0 }}>
 
+                                <li>
+                                    <div className={'b'}>
+                                        <img className={"maps-icon"} src={mapsIcon} alt ={"mapsIcon"}/>
+                                        <Link to="/Maps">
+                                            <span onClick={handleOnMap}>Maps</span></Link>
+
+
+
+                                    </div>
+
+                                </li>
+                                <li>
+                                    <div className={'b'}>
+                                        <img className={"vol-icon"} src={volIcon} alt ={"volIcon"}/>
+                                        <Link to="/Volunteers">
+                                            <span onClick={handleOnVolunteers}>Volunteers</span></Link>
+                                    </div>
+
+                                </li>
+                                {check==='true' ?
+                                    ( <li><DropDownMenu/></li>) :null}
+                                {check==='true' ?
+                                    ( <li><CheckboxMarker/></li> ) :null}
+
+
+
+
+
+
+                            </ul>
+
+
+
+
+
+
+                            <div className={'signOutBorder'}>
+                                <ThemeProvider theme={theme}>
+                                    <ColorButton   variant={'outlined'} className={classes.margin} onClick={ () =>
+                                    {
+
+                                        handleLogOut();
+
+                                    }
+                                    }
+                                    >
+
+                                        <Link style= {{color: 'white'}} to="/Login">
+                                            Log Out
+                                        </Link>
+
+                                    </ColorButton>
+                                </ThemeProvider>
                             </div>
 
-                        </li>
-                        <li>
-                            <div className={'b'}>
-                                <img className={"vol-icon"} src={volIcon} alt ={"volIcon"}/>
-                                <Link to="/Ambrosia/Volunteers"> Volunteers</Link>
-                            </div>
 
-                        </li>
-                    </ul>
+                        </div>
 
 
 
-                        <DropDownMenu/>
-                        <CheckboxMarker/>
-
-
-                    <div className={'signOutBorder'}>
-                        <ThemeProvider theme={theme}>
-                        <ColorButton   variant={'outlined'} className={classes.margin} onClick={ () =>
-                        {
-                            handleLogOut();
-                            window.location.reload(false);
-                        }
-                        }
-                        >Sign out
-                        </ColorButton>
-                        </ThemeProvider>
                     </div>
-                    <Switch>
-                        <Redirect from="/" to="/Ambrosia/Maps"/>
-                        {routes.map((route, index) => (
-                            // You can render a <Route> in as many places
-                            // as you want in your app. It will render along
-                            // with any other <Route>s that also match the URL.
-                            // So, a sidebar or breadcrumbs or anything else
-                            // that requires you to render multiple things
-                            // in multiple places at the same URL is nothing
-                            // more than multiple <Route>s.
-                            <Route
-                                key={index}
-                                path={route.path}
-                                exact={route.exact}
-                                children={<route.sidebar />}
-                            />
-                        ))}
-                    </Switch>
-                </div>
+                </Router>
+            );
+        }
 
-                <div style={{ flex: 1, padding: "10px" }}>
-                    <Switch>
-                        {routes.map((route, index) => (
-                            // Render more <Route>s with the same paths as
-                            // above, but different Ambrosia this time.
-                            <Route
-                                key={index}
-                                path={route.path}
-                                exact={route.exact}
-                                children={<route.main />}
-                            />
-                        ))}
-                    </Switch>
-                </div>
 
-            </div>
-        </Router>
-    );
+
 }
 
 export default NavBar;

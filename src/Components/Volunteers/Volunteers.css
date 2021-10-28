@@ -1,0 +1,35 @@
+
+.page-switcher
+{
+    position: fixed;
+    bottom: 0px;
+    right: 0;
+    left:0;
+}
+
+.table
+{
+    position:fixed;
+    bottom:0px;
+    right: 0;
+    left:150px;
+    top:0px;
+    color: white;
+
+}
+.button
+{
+    background-color: #2b313d;
+    width: 50%;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    transition: all 0.3s ease 0s;
+    color: white;
+}
+
+
+.button:hover
+{
+    background-color: #1fb299 ;
+
+}
