@@ -46,7 +46,8 @@ const center = {
 };
 
 
-function MyComponent() {
+function GMaps() {
+
 
 
     let convToTen =(num)=>  //conversie la 10 zecimale
@@ -519,5 +520,5 @@ function MyComponent() {
     )
 }
 
-export default React.memo(MyComponent)
+export default GMaps
 

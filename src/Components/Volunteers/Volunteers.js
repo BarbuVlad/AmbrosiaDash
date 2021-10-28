@@ -16,6 +16,8 @@ let volunteer;
 //obtin index pentru randul la care vreau sa modific tipul voluntarului
 
 function Volunteers () {
+    localStorage.setItem('onMaps', 'false')
+
     //Copiez datele din db in variabila locala
     Data = VolData.map(vol => ([vol.uid, vol.first_name, vol.last_name, vol.address, vol.phone, vol.email, vol.type]))
 
@@ -54,7 +56,7 @@ function Volunteers () {
 
 
 
-    const columns = ["UID", "First Name", "Last Name", "Address", "Phone", "Email", "Type" /*,{
+    const columns = ["UID", "First Name", "Last Name", "Address", "Phone", "Email", "Type" ,{
                                                                                                 name: "Action",
                                                                                                 options: {
                                                                                                     filter: true,
@@ -62,12 +64,14 @@ function Volunteers () {
                                                                                                     empty: true,
                                                                                                     customBodyRender: handleRowClick
                                                                                                 }
-                                                                                             }*/
+                                                                                             }
     ];
 
     const options = {
+
+        rowsPerPageOptions: [14],
         filterType: "dropdown",
-        responsive: "scroll",
+        responsive: "stacked",
         onRowsDelete: handleDeleteRow ,
 
 
@@ -100,6 +104,8 @@ function Volunteers () {
 }
 
 const myTheme = createMuiTheme({
+
+
     overrides: {
 
         MUIDataTable: {
